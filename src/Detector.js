@@ -6,13 +6,13 @@
 export default {
 
   canvas: !! window.CanvasRenderingContext2D,
-  webgl: ( function () { try { var canvas = document.createElement( 'canvas' ); return !! window.WebGLRenderingContext && ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) ); } catch( e ) { return false; } } )(),
+  webgl: ( function () { try { const canvas = document.createElement( 'canvas' ); return !! window.WebGLRenderingContext && ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) ); } catch( e ) { return false; } } )(),
   workers: !! window.Worker,
   fileapi: window.File && window.FileReader && window.FileList && window.Blob,
 
-  getWebGLErrorMessage: function () {
+  getWebGLErrorMessage () {
 
-    var element = document.createElement( 'div' );
+    const element = document.createElement( 'div' );
     element.className = 'webgl-error';
 
     if ( !this.webgl ) {
@@ -31,7 +31,7 @@ export default {
 
   },
 
-  addGetWebGLMessage: function (parent ) {
+  addGetWebGLMessage (parent ) {
 
     parent.appendChild( Detector.getWebGLErrorMessage() );
 

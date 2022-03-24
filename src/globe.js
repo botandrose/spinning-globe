@@ -1,28 +1,29 @@
 // import MobileDetect from "./mobile-detect.js";
-import Detector from "./Detector.js";
 import Vue from "https://ga.jspm.io/npm:vue@2.6.14/dist/vue.esm.browser.js";
 
 import * as THREE from 'https://cdn.skypack.dev/three@v0.122.0';
+import Detector from "./Detector.js";
 
 import BuildOrbitControls from "./OrbitControls.js";
-const OrbitControls = BuildOrbitControls(THREE);
 
 import BuildTrackballControls from "./TrackballControls.js";
+
+const OrbitControls = BuildOrbitControls(THREE);
 const TrackballControls = BuildTrackballControls(THREE);
 
 window.process = {}
 
-var ImageLoader = function ( manager ) {
+const ImageLoader = function ( manager ) {
   this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
 }
 
 Object.assign(ImageLoader.prototype, {
 
-  load: function ( url, onLoad, onProgress, onError ) {
+  load ( url, onLoad, onProgress, onError ) {
 
-    var scope = this;
+    const scope = this;
 
-    var image = document.createElementNS( 'http://www.w3.org/1999/xhtml', 'img' );
+    const image = document.createElementNS( 'http://www.w3.org/1999/xhtml', 'img' );
     image.onload = function () {
 
       image.onload = null;
@@ -36,11 +37,11 @@ Object.assign(ImageLoader.prototype, {
     };
     image.onerror = onError;
 
-    var loader = new THREE.FileLoader();
+    const loader = new THREE.FileLoader();
     loader.setPath( this.path );
     loader.setResponseType( 'blob' );
     loader.setWithCredentials( this.withCredentials );
-    loader.load( url, function ( blob ) {
+    loader.load( url, ( blob ) => {
 
       image.src = URL.createObjectURL( blob );
 
@@ -52,21 +53,21 @@ Object.assign(ImageLoader.prototype, {
 
   },
 
-  setCrossOrigin: function ( value ) {
+  setCrossOrigin ( value ) {
 
     this.crossOrigin = value;
     return this;
 
   },
 
-  setWithCredentials: function ( value ) {
+  setWithCredentials ( value ) {
 
     this.withCredentials = value;
     return this;
 
   },
 
-  setPath: function ( value ) {
+  setPath ( value ) {
 
     this.path = value;
     return this;
@@ -77,45 +78,45 @@ Object.assign(ImageLoader.prototype, {
 
 
 export default function(element) {
-  element.querySelectorAll("[data-globe]").forEach(function(container) {
+  element.querySelectorAll("[data-globe]").forEach((container) => {
     // Get current globe slug from URL
-    var globeKey = "globe";
-    var hiresMap = container.getAttribute("data-globe");
-    var medresMap = container.getAttribute("data-globe-medres");
-    var loresMap = container.getAttribute("data-globe-lores");
-    var specular = parseFloat(container.getAttribute("data-globe-specular") || 30);
-    var fullscreen = container.getAttribute("data-globe-fullscreen") === "true";
-    var isInside = container.getAttribute("data-globe-inside") === "true";
-    var starImagePath = container.getAttribute("data-globe-background");
+    const globeKey = "globe";
+    const hiresMap = container.getAttribute("data-globe");
+    const medresMap = container.getAttribute("data-globe-medres");
+    const loresMap = container.getAttribute("data-globe-lores");
+    const specular = parseFloat(container.getAttribute("data-globe-specular") || 30);
+    const fullscreen = container.getAttribute("data-globe-fullscreen") === "true";
+    const isInside = container.getAttribute("data-globe-inside") === "true";
+    const starImagePath = container.getAttribute("data-globe-background");
     // var isMobile = new MobileDetect(window.navigator.userAgent).mobile();
     // var isPretendingToBeDesktop = /iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     // var isFirefox = /Firefox/.test(navigator.userAgent);
     // var map = fullscreen && !isMobile && !isPretendingToBeDesktop ? hiresMap : loresMap;
     // if(fullscreen && isFirefox) { map = medresMap; }
-    var map = hiresMap;
+    const map = hiresMap;
 
     // Params
 
-    var radius = 0.5;
-    var segments = 128;
-    var rotation = 15;
-    var rotationSpeed = 0.0005;
+    const radius = 0.5;
+    const segments = 128;
+    const rotation = 15;
+    const rotationSpeed = 0.0005;
     // var rotationSpeed = 0.014;
-    var waitTimeAfterInteraction = 10000;
+    const waitTimeAfterInteraction = 10000;
 
-    var width = window.innerWidth;
-    var height = window.innerHeight; // !fullscreen && isMobile ? 300 : window.innerHeight;
+    const width = window.innerWidth;
+    const height = window.innerHeight; // !fullscreen && isMobile ? 300 : window.innerHeight;
 
     // Globe configurations
-    var globeConfigs = {
+    const globeConfigs = {
       globe: {
         name: "",
-        radius: radius,
-        segments: segments,
-        map: map,
+        radius,
+        segments,
+        map,
         bumpMap: null,
         bumpScale: 0.0008,
-        specular: specular,
+        specular,
         content: null,
         imageUrl: null,
         artist: null,
@@ -125,14 +126,14 @@ export default function(element) {
       },
     };
 
-    var element = container.querySelector("[data-globe-app]");
-    var webglEl = container.querySelector("#webgl");
+    const element = container.querySelector("[data-globe-app]");
+    const webglEl = container.querySelector("#webgl");
     // Set up Vue instance
-    var vueApp = new Vue({
+    const vueApp = new Vue({
       el: element,
       data: {
         items: globeConfigs,
-        globeKey: globeKey,
+        globeKey,
         title: null,
         content: null,
         year: null,
@@ -144,28 +145,28 @@ export default function(element) {
         isGlobeMenuOpen: false
       },
       methods: {
-        toggleMoreModal: function() {
+        toggleMoreModal() {
           this.$data.isMoreModalOpen = !this.$data.isMoreModalOpen;
           this.$data.isAboutModalOpen = false;
           this.$data.isGlobeMenuOpen = false;
         },
-        toggleAboutModal: function() {
+        toggleAboutModal() {
           this.$data.isAboutModalOpen = !this.$data.isAboutModalOpen;
           this.$data.isMoreModalOpen = false;
           this.$data.isGlobeMenuOpen = false;
         },
-        toggleGlobeMenu: function() {
+        toggleGlobeMenu() {
           this.$data.isGlobeMenuOpen = !this.$data.isGlobeMenuOpen;
         },
-        closeModals: function() {
+        closeModals() {
           this.$data.isAboutModalOpen = false;
           this.$data.isMoreModalOpen = false;
           this.$data.isGlobeMenuOpen = false;
         },
-        updateLoading: function(percent) {
-          this.$data.loading = percent + "%";
+        updateLoading(percent) {
+          this.$data.loading = `${percent  }%`;
         },
-        hideLoading: function() {
+        hideLoading() {
           this.$data.isLoading = false;
         }
       }
@@ -177,7 +178,7 @@ export default function(element) {
       return;
     }
 
-    var scene = new THREE.Scene();
+    const scene = new THREE.Scene();
     if (isInside) {
       scene.add(new THREE.AmbientLight(0xcccccc));
     } else {
@@ -185,10 +186,10 @@ export default function(element) {
     }
 
     // Make camera position responsive to browser width
-    var cameraDepth = 1 / width * 10000 + (isInside ? 80 : 40);
+    const cameraDepth = 1 / width * 10000 + (isInside ? 80 : 40);
     // if(!fullscreen && isMobile) { cameraDepth -= 20; }
 
-    var camera = new THREE.PerspectiveCamera(
+    const camera = new THREE.PerspectiveCamera(
       cameraDepth,
       width / height,
       0.01,
@@ -199,17 +200,17 @@ export default function(element) {
     camera.minFov = 5;
     camera.maxFov = cameraDepth;
 
-    var renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer();
     renderer.setSize(width, height);
     webglEl.appendChild(renderer.domElement);
 
-    var light = new THREE.DirectionalLight(0xffffff, 0.7);
+    const light = new THREE.DirectionalLight(0xffffff, 0.7);
     light.position.set(5, 3, 5);
     if (!isInside) {
       scene.add(light);
     }
 
-    var spheres = createSpheres(globeConfigs);
+    const spheres = createSpheres(globeConfigs);
     spheres[globeKey].rotation.y = rotation;
     spheres[globeKey].material.transparent = true;
     if (isInside) {
@@ -217,7 +218,7 @@ export default function(element) {
     }
     // scene.add(spheres[globeKey]);
 
-    var stars = createStars(90, 64, starImagePath);
+    const stars = createStars(90, 64, starImagePath);
     scene.add(stars);
 
     const controls = isInside ? new OrbitControls(camera, webglEl) : new TrackballControls(camera, webglEl);
@@ -235,16 +236,16 @@ export default function(element) {
       }
 
       // keep light source near camera
-      var p = camera.position;
-      var q = new THREE.Vector3();
+      const p = camera.position;
+      const q = new THREE.Vector3();
       q.x = p.x;
       q.y = p.y;
       q.z = p.z;
-      var yaxis = new THREE.Vector3(0, 1, 0);
-      var angle = Math.PI / 4;
+      const yaxis = new THREE.Vector3(0, 1, 0);
+      const angle = Math.PI / 4;
       q.applyAxisAngle(yaxis, angle);
-      var zaxis = new THREE.Vector3(0, 0, 1);
-      var angle2 = Math.PI / 6;
+      const zaxis = new THREE.Vector3(0, 0, 1);
+      const angle2 = Math.PI / 6;
       q.applyAxisAngle(zaxis, angle2);
       light.position.copy(q);
 
@@ -264,10 +265,10 @@ export default function(element) {
       // load a image resource
       loader.load(
         args.map,
-        function(image) {
+        (image) => {
           // use the image, e.g. draw part of it on a canvas
-          let imgw = image.width;
-          let imgh = image.height;
+          const imgw = image.width;
+          const imgh = image.height;
           // make the canvas big enough
           ctx.canvas.width = imgw;
           ctx.canvas.height = imgh;
@@ -279,13 +280,13 @@ export default function(element) {
           vueApp.hideLoading();
         },
 
-        function(event) {
+        (event) => {
           const percent = event.loaded / event.total * 100;
           vueApp.updateLoading(percent);
         },
 
         // onError callback
-        function() {
+        () => {
           console.error('An error happened.');
         }
       );
@@ -316,7 +317,7 @@ export default function(element) {
     function createSpheres(globeConfigs) {
       const result = {};
 
-      Object.keys(globeConfigs).forEach(function(slug) {
+      Object.keys(globeConfigs).forEach((slug) => {
         result[slug] = createSphere(globeConfigs[slug]);
       });
 
@@ -324,8 +325,8 @@ export default function(element) {
     }
 
     function createStars(radius, segments, starImagePath) {
-      let texture = new THREE.TextureLoader().load(starImagePath);
-      let material = new THREE.MeshBasicMaterial({
+      const texture = new THREE.TextureLoader().load(starImagePath);
+      const material = new THREE.MeshBasicMaterial({
         side: THREE.BackSide,
         map: texture,
       });
@@ -343,10 +344,10 @@ export default function(element) {
 
     // Get query variable from URL
     function getQueryVariable(variable) {
-      var query = window.location.search.substring(1);
-      var vars = query.split('&');
-      for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split('=');
+      const query = window.location.search.substring(1);
+      const vars = query.split('&');
+      for (let i = 0; i < vars.length; i++) {
+        const pair = vars[i].split('=');
         if (pair[0] == variable) {
           return pair[1];
         }
@@ -356,11 +357,11 @@ export default function(element) {
 
     // Animation Functions
     function trackOriginalOpacities(mesh) {
-      var opacities = [],
-        materials = mesh.material.materials
+      const opacities = [];
+        const materials = mesh.material.materials
         ? mesh.material.materials
         : [mesh.material];
-      for (var i = 0; i < materials.length; i++) {
+      for (let i = 0; i < materials.length; i++) {
         materials[i].transparent = true;
         opacities.push(materials[i].opacity);
       }
@@ -370,14 +371,14 @@ export default function(element) {
     function fadeMesh(mesh, direction, options) {
       options = options || {};
       // set and check
-      var current = { percentage: direction == 'in' ? 1 : 0 },
+      const current = { percentage: direction == 'in' ? 1 : 0 };
         // this check is used to work with normal and multi materials.
-        mats = mesh.material.materials
+        const mats = mesh.material.materials
         ? mesh.material.materials
-        : [mesh.material],
-        originals = mesh.userData.originalOpacities,
-        easing = options.easing || TWEEN.Easing.Linear.None,
-        duration = options.duration || 2000;
+        : [mesh.material];
+        const originals = mesh.userData.originalOpacities;
+        const easing = options.easing || TWEEN.Easing.Linear.None;
+        const duration = options.duration || 2000;
       // check to make sure originals exist
       if (!originals) {
         console.error(
@@ -386,15 +387,15 @@ export default function(element) {
         return;
       }
       // tween opacity back to originals
-      var tweenOpacity = new TWEEN.Tween(current)
+      const tweenOpacity = new TWEEN.Tween(current)
         .to({ percentage: direction == 'in' ? 0 : 1 }, duration)
         .easing(easing)
-        .onUpdate(function() {
-          for (var i = 0; i < mats.length; i++) {
+        .onUpdate(() => {
+          for (let i = 0; i < mats.length; i++) {
             mats[i].opacity = originals[i] * current.percentage;
           }
         })
-        .onComplete(function() {
+        .onComplete(() => {
           if (options.callback) {
             options.callback();
           }

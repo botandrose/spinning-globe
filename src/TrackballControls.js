@@ -4,10 +4,10 @@
 
 function wrapper(THREE) {
 
-  var TrackballControls = function ( object, domElement ) {
+  const TrackballControls = function ( object, domElement ) {
 
-    var _this = this;
-    var STATE = { NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM: 4, TOUCH_PAN: 5 };
+    const _this = this;
+    const STATE = { NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM: 4, TOUCH_PAN: 5 };
 
     this.object = object;
     this.domElement = ( domElement !== undefined ) ? domElement : document;
@@ -35,30 +35,30 @@ function wrapper(THREE) {
     this.minDistance = 0.8;
     this.maxDistance = 10;
 
-    this.keys = [ 65 /*A*/, 83 /*S*/, 68 /*D*/ ];
+    this.keys = [ 65 /* A */, 83 /* S */, 68 /* D */ ];
 
     // internals
 
     this.target = new THREE.Vector3();
 
-    var lastPosition = new THREE.Vector3();
+    const lastPosition = new THREE.Vector3();
 
-    var _state = STATE.NONE,
-      _prevState = STATE.NONE,
+    let _state = STATE.NONE;
+      let _prevState = STATE.NONE;
 
-      _eye = new THREE.Vector3(),
+      const _eye = new THREE.Vector3();
 
-      _rotateStart = new THREE.Vector3(),
-      _rotateEnd = new THREE.Vector3(),
+      let _rotateStart = new THREE.Vector3();
+      let _rotateEnd = new THREE.Vector3();
 
-      _zoomStart = new THREE.Vector2(),
-      _zoomEnd = new THREE.Vector2(),
+      let _zoomStart = new THREE.Vector2();
+      let _zoomEnd = new THREE.Vector2();
 
-      _touchZoomDistanceStart = 0,
-      _touchZoomDistanceEnd = 0,
+      let _touchZoomDistanceStart = 0;
+      let _touchZoomDistanceEnd = 0;
 
-      _panStart = new THREE.Vector2(),
-      _panEnd = new THREE.Vector2();
+      let _panStart = new THREE.Vector2();
+      let _panEnd = new THREE.Vector2();
 
     // for reset
 
@@ -68,7 +68,7 @@ function wrapper(THREE) {
 
     // events
 
-    var changeEvent = { type: 'change' };
+    const changeEvent = { type: 'change' };
 
 
     // methods
@@ -87,7 +87,7 @@ function wrapper(THREE) {
 
     this.handleEvent = function ( event ) {
 
-      if ( typeof this[ event.type ] == 'function' ) {
+      if ( typeof this[ event.type ] === 'function' ) {
 
         this[ event.type ]( event );
 
@@ -106,13 +106,13 @@ function wrapper(THREE) {
 
     this.getMouseProjectionOnBall = function ( clientX, clientY ) {
 
-      var mouseOnBall = new THREE.Vector3(
+      const mouseOnBall = new THREE.Vector3(
         ( clientX - _this.screen.width * 0.5 - _this.screen.offsetLeft ) / _this.radius,
         ( _this.screen.height * 0.5 + _this.screen.offsetTop - clientY ) / _this.radius,
         0.0
       );
 
-      var length = mouseOnBall.length();
+      const length = mouseOnBall.length();
 
       if ( length > 1.0 ) {
 
@@ -126,7 +126,7 @@ function wrapper(THREE) {
 
       _eye.copy( _this.object.position ).sub( _this.target );
 
-      var projection = _this.object.up.clone().setLength( mouseOnBall.y );
+      const projection = _this.object.up.clone().setLength( mouseOnBall.y );
       projection.add( _this.object.up.clone().cross( _eye ).setLength( mouseOnBall.x ) );
       projection.add( _eye.setLength( mouseOnBall.z ) );
 
@@ -136,12 +136,12 @@ function wrapper(THREE) {
 
     this.rotateCamera = function () {
 
-      var angle = Math.acos( _rotateStart.dot( _rotateEnd ) / _rotateStart.length() / _rotateEnd.length() );
+      let angle = Math.acos( _rotateStart.dot( _rotateEnd ) / _rotateStart.length() / _rotateEnd.length() );
 
       if ( angle ) {
 
-        var axis = ( new THREE.Vector3() ).crossVectors( _rotateStart, _rotateEnd ).normalize();
-        var quaternion = new THREE.Quaternion();
+        const axis = ( new THREE.Vector3() ).crossVectors( _rotateStart, _rotateEnd ).normalize();
+        const quaternion = new THREE.Quaternion();
 
         angle *= _this.rotateSpeed;
 
@@ -204,13 +204,13 @@ function wrapper(THREE) {
 
     this.panCamera = function () {
 
-      var mouseChange = _panEnd.clone().sub( _panStart );
+      const mouseChange = _panEnd.clone().sub( _panStart );
 
       if ( mouseChange.lengthSq() ) {
 
         mouseChange.multiplyScalar( _eye.length() * _this.panSpeed );
 
-        var pan = _eye.clone().cross( _this.object.up ).setLength( mouseChange.x );
+        const pan = _eye.clone().cross( _this.object.up ).setLength( mouseChange.x );
         pan.add( _this.object.up.clone().setLength( mouseChange.y ) );
 
         _this.object.position.add( pan );
@@ -319,7 +319,7 @@ function wrapper(THREE) {
 
       if ( _state !== STATE.NONE ) {
 
-        return;
+        
 
       } else if ( event.keyCode === _this.keys[ STATE.ROTATE ] && !_this.noRotate ) {
 
@@ -429,7 +429,7 @@ function wrapper(THREE) {
 
       _this.lastTouchAt = new Date();
 
-      var delta = 0;
+      let delta = 0;
 
       if ( event.wheelDelta ) { // WebKit / Opera / Explorer 9
 
@@ -536,7 +536,7 @@ function wrapper(THREE) {
 
     }
 
-    this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
+    this.domElement.addEventListener( 'contextmenu', ( event ) => { event.preventDefault(); }, false );
 
     this.domElement.addEventListener( 'mousedown', mousedown, false );
 

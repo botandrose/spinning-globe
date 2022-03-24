@@ -7,7 +7,7 @@
 
 function bootstrap(THREE) {
 
-  var OrbitControls = function ( object, domElement ) {
+  const OrbitControls = function ( object, domElement ) {
 
     if ( domElement === undefined ) console.warn( 'THREE.OrbitControls: The second parameter "domElement" is now mandatory.' );
     if ( domElement === document ) console.error( 'THREE.OrbitControls: "document" should not be used as the target "domElement". Please use "renderer.domElement" instead.' );
@@ -130,20 +130,20 @@ function bootstrap(THREE) {
     // this method is exposed, but perhaps it would be better if we can make it private...
     this.update = function () {
 
-      var offset = new THREE.Vector3();
+      const offset = new THREE.Vector3();
 
       // so camera.up is the orbit axis
-      var quat = new THREE.Quaternion().setFromUnitVectors( object.up, new THREE.Vector3( 0, 1, 0 ) );
-      var quatInverse = quat.clone().inverse();
+      const quat = new THREE.Quaternion().setFromUnitVectors( object.up, new THREE.Vector3( 0, 1, 0 ) );
+      const quatInverse = quat.clone().inverse();
 
-      var lastPosition = new THREE.Vector3();
-      var lastQuaternion = new THREE.Quaternion();
+      const lastPosition = new THREE.Vector3();
+      const lastQuaternion = new THREE.Quaternion();
 
-      var twoPI = 2 * Math.PI;
+      const twoPI = 2 * Math.PI;
 
       return function update() {
 
-        var position = scope.object.position;
+        const {position} = scope.object;
 
         offset.copy( position ).sub( scope.target );
 
@@ -173,8 +173,8 @@ function bootstrap(THREE) {
 
         // restrict theta to be between desired limits
 
-        var min = scope.minAzimuthAngle;
-        var max = scope.maxAzimuthAngle;
+        let min = scope.minAzimuthAngle;
+        let max = scope.maxAzimuthAngle;
 
         if ( isFinite( min ) && isFinite( max ) ) {
 
@@ -290,7 +290,7 @@ function bootstrap(THREE) {
 
       }
 
-      //scope.dispatchEvent( { type: 'dispose' } ); // should this be added here?
+      // scope.dispatchEvent( { type: 'dispose' } ); // should this be added here?
 
     };
 
@@ -301,8 +301,8 @@ function bootstrap(THREE) {
     var scope = this;
 
     var changeEvent = { type: 'change' };
-    var startEvent = { type: 'start' };
-    var endEvent = { type: 'end' };
+    const startEvent = { type: 'start' };
+    const endEvent = { type: 'end' };
 
     var STATE = {
       NONE: - 1,
@@ -327,17 +327,17 @@ function bootstrap(THREE) {
     var panOffset = new THREE.Vector3();
     var zoomChanged = false;
 
-    var rotateStart = new THREE.Vector2();
-    var rotateEnd = new THREE.Vector2();
-    var rotateDelta = new THREE.Vector2();
+    const rotateStart = new THREE.Vector2();
+    const rotateEnd = new THREE.Vector2();
+    const rotateDelta = new THREE.Vector2();
 
-    var panStart = new THREE.Vector2();
-    var panEnd = new THREE.Vector2();
-    var panDelta = new THREE.Vector2();
+    const panStart = new THREE.Vector2();
+    const panEnd = new THREE.Vector2();
+    const panDelta = new THREE.Vector2();
 
-    var dollyStart = new THREE.Vector2();
-    var dollyEnd = new THREE.Vector2();
-    var dollyDelta = new THREE.Vector2();
+    const dollyStart = new THREE.Vector2();
+    const dollyEnd = new THREE.Vector2();
+    const dollyDelta = new THREE.Vector2();
 
     function getAutoRotationAngle() {
 
@@ -363,9 +363,9 @@ function bootstrap(THREE) {
 
     }
 
-    var panLeft = function () {
+    const panLeft = function () {
 
-      var v = new THREE.Vector3();
+      const v = new THREE.Vector3();
 
       return function panLeft( distance, objectMatrix ) {
 
@@ -378,9 +378,9 @@ function bootstrap(THREE) {
 
     }();
 
-    var panUp = function () {
+    const panUp = function () {
 
-      var v = new THREE.Vector3();
+      const v = new THREE.Vector3();
 
       return function panUp( distance, objectMatrix ) {
 
@@ -404,20 +404,20 @@ function bootstrap(THREE) {
     }();
 
     // deltaX and deltaY are in pixels; right and down are positive
-    var pan = function () {
+    const pan = function () {
 
-      var offset = new THREE.Vector3();
+      const offset = new THREE.Vector3();
 
       return function pan( deltaX, deltaY ) {
 
-        var element = scope.domElement;
+        const element = scope.domElement;
 
         if ( scope.object.isPerspectiveCamera ) {
 
           // perspective
-          var position = scope.object.position;
+          const {position} = scope.object;
           offset.copy( position ).sub( scope.target );
-          var targetDistance = offset.length();
+          let targetDistance = offset.length();
 
           // half of the fov is center to top of screen
           targetDistance *= Math.tan( ( scope.object.fov / 2 ) * Math.PI / 180.0 );
@@ -514,7 +514,7 @@ function bootstrap(THREE) {
 
       rotateDelta.subVectors( rotateEnd, rotateStart ).multiplyScalar( scope.rotateSpeed );
 
-      var element = scope.domElement;
+      const element = scope.domElement;
 
       rotateLeft( 2 * Math.PI * rotateDelta.x / element.clientHeight ); // yes, height
 
@@ -562,7 +562,7 @@ function bootstrap(THREE) {
 
     }
 
-    function handleMouseUp( /*event*/ ) {
+    function handleMouseUp( /* event */ ) {
 
       // no-op
 
@@ -586,7 +586,7 @@ function bootstrap(THREE) {
 
     function handleKeyDown( event ) {
 
-      var needsUpdate = false;
+      let needsUpdate = false;
 
       switch ( event.keyCode ) {
 
@@ -632,8 +632,8 @@ function bootstrap(THREE) {
 
       } else {
 
-        var x = 0.5 * ( event.touches[ 0 ].pageX + event.touches[ 1 ].pageX );
-        var y = 0.5 * ( event.touches[ 0 ].pageY + event.touches[ 1 ].pageY );
+        const x = 0.5 * ( event.touches[ 0 ].pageX + event.touches[ 1 ].pageX );
+        const y = 0.5 * ( event.touches[ 0 ].pageY + event.touches[ 1 ].pageY );
 
         rotateStart.set( x, y );
 
@@ -649,8 +649,8 @@ function bootstrap(THREE) {
 
       } else {
 
-        var x = 0.5 * ( event.touches[ 0 ].pageX + event.touches[ 1 ].pageX );
-        var y = 0.5 * ( event.touches[ 0 ].pageY + event.touches[ 1 ].pageY );
+        const x = 0.5 * ( event.touches[ 0 ].pageX + event.touches[ 1 ].pageX );
+        const y = 0.5 * ( event.touches[ 0 ].pageY + event.touches[ 1 ].pageY );
 
         panStart.set( x, y );
 
@@ -660,10 +660,10 @@ function bootstrap(THREE) {
 
     function handleTouchStartDolly( event ) {
 
-      var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
-      var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
+      const dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
+      const dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
 
-      var distance = Math.sqrt( dx * dx + dy * dy );
+      const distance = Math.sqrt( dx * dx + dy * dy );
 
       dollyStart.set( 0, distance );
 
@@ -693,8 +693,8 @@ function bootstrap(THREE) {
 
       } else {
 
-        var x = 0.5 * ( event.touches[ 0 ].pageX + event.touches[ 1 ].pageX );
-        var y = 0.5 * ( event.touches[ 0 ].pageY + event.touches[ 1 ].pageY );
+        const x = 0.5 * ( event.touches[ 0 ].pageX + event.touches[ 1 ].pageX );
+        const y = 0.5 * ( event.touches[ 0 ].pageY + event.touches[ 1 ].pageY );
 
         rotateEnd.set( x, y );
 
@@ -702,7 +702,7 @@ function bootstrap(THREE) {
 
       rotateDelta.subVectors( rotateEnd, rotateStart ).multiplyScalar( scope.rotateSpeed );
 
-      var element = scope.domElement;
+      const element = scope.domElement;
 
       rotateLeft( 2 * Math.PI * rotateDelta.x / element.clientHeight ); // yes, height
 
@@ -720,8 +720,8 @@ function bootstrap(THREE) {
 
       } else {
 
-        var x = 0.5 * ( event.touches[ 0 ].pageX + event.touches[ 1 ].pageX );
-        var y = 0.5 * ( event.touches[ 0 ].pageY + event.touches[ 1 ].pageY );
+        const x = 0.5 * ( event.touches[ 0 ].pageX + event.touches[ 1 ].pageX );
+        const y = 0.5 * ( event.touches[ 0 ].pageY + event.touches[ 1 ].pageY );
 
         panEnd.set( x, y );
 
@@ -737,10 +737,10 @@ function bootstrap(THREE) {
 
     function handleTouchMoveDolly( event ) {
 
-      var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
-      var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
+      const dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
+      const dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
 
-      var distance = Math.sqrt( dx * dx + dy * dy );
+      const distance = Math.sqrt( dx * dx + dy * dy );
 
       dollyEnd.set( 0, distance );
 
@@ -768,7 +768,7 @@ function bootstrap(THREE) {
 
     }
 
-    function handleTouchEnd( /*event*/ ) {
+    function handleTouchEnd( /* event */ ) {
 
       // no-op
 
@@ -837,7 +837,7 @@ function bootstrap(THREE) {
 
       scope.domElement.focus ? scope.domElement.focus() : window.focus();
 
-      var mouseAction;
+      let mouseAction;
 
       switch ( event.button ) {
 
@@ -1201,7 +1201,7 @@ function bootstrap(THREE) {
   //    Zoom - middle mouse, or mousewheel / touch: two-finger spread or squish
   //    Pan - left mouse, or arrow keys / touch: one-finger move
 
-  var MapControls = function ( object, domElement ) {
+  const MapControls = function ( object, domElement ) {
 
     OrbitControls.call( this, object, domElement );
 
