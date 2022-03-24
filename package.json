@@ -17,11 +17,14 @@
     "storybook:build": "npm run analyze -- --exclude dist && build-storybook"
   },
   "dependencies": {
-    "@koa/cors": "^3.2.0",
-    "lit": "^2.0.2"
+    "current-device": "^0.10.2",
+    "lit": "^2.0.2",
+    "three": "^0.138.3",
+    "vue": "^2.6.4"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",
+    "@koa/cors": "^3.2.0",
     "@open-wc/eslint-config": "^4.3.0",
     "@open-wc/testing": "next",
     "@web/dev-server": "^0.1.28",

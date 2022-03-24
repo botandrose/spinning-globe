@@ -1,15 +1,15 @@
-// import MobileDetect from "./mobile-detect.js";
-import Vue from "https://ga.jspm.io/npm:vue@2.6.14/dist/vue.esm.browser.js";
+import device from "current-device";
+import Vue from "vue/dist/vue.esm.browser";
 
-import * as THREE from 'https://cdn.skypack.dev/three@v0.122.0';
-import Detector from "./Detector.js";
+import * as THREE from 'three';
 
 import BuildOrbitControls from "./OrbitControls.js";
+const OrbitControls = BuildOrbitControls(THREE);
 
 import BuildTrackballControls from "./TrackballControls.js";
-
-const OrbitControls = BuildOrbitControls(THREE);
 const TrackballControls = BuildTrackballControls(THREE);
+
+import Detector from "./Detector.js";
 
 window.process = {}
 
@@ -88,12 +88,11 @@ export default function(element) {
     const fullscreen = container.getAttribute("data-globe-fullscreen") === "true";
     const isInside = container.getAttribute("data-globe-inside") === "true";
     const starImagePath = container.getAttribute("data-globe-background");
-    // var isMobile = new MobileDetect(window.navigator.userAgent).mobile();
-    // var isPretendingToBeDesktop = /iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    // var isFirefox = /Firefox/.test(navigator.userAgent);
-    // var map = fullscreen && !isMobile && !isPretendingToBeDesktop ? hiresMap : loresMap;
-    // if(fullscreen && isFirefox) { map = medresMap; }
-    const map = hiresMap;
+    var isMobile = device.mobile();
+    var isPretendingToBeDesktop = /iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var isFirefox = /Firefox/.test(navigator.userAgent);
+    var map = fullscreen && !isMobile && !isPretendingToBeDesktop ? hiresMap : loresMap;
+    if(fullscreen && isFirefox) { map = medresMap; }
 
     // Params
 
@@ -105,7 +104,7 @@ export default function(element) {
     const waitTimeAfterInteraction = 10000;
 
     const width = window.innerWidth;
-    const height = window.innerHeight; // !fullscreen && isMobile ? 300 : window.innerHeight;
+    const height = !fullscreen && isMobile ? 300 : window.innerHeight;
 
     // Globe configurations
     const globeConfigs = {
@@ -187,7 +186,7 @@ export default function(element) {
 
     // Make camera position responsive to browser width
     const cameraDepth = 1 / width * 10000 + (isInside ? 80 : 40);
-    // if(!fullscreen && isMobile) { cameraDepth -= 20; }
+    if(!fullscreen && isMobile) { cameraDepth -= 20; }
 
     const camera = new THREE.PerspectiveCamera(
       cameraDepth,
