@@ -11,11 +11,20 @@ npm i spinning-globe
 ## Usage
 
 ```html
-<script type="module">
-  import 'spinning-globe/spinning-globe.js';
-</script>
+<script type="module">import 'spinning-globe';</script>
 
 <spinning-globe></spinning-globe>
+```
+
+Or, if you want to specify the custom html tag used:
+
+```html
+<script type="module">
+  import { SpinningGlobe } from 'spinning-globe/spinning-globe';
+  window.customElements.define('derpy-derp', SpinningGlobe);
+</script>
+
+<derpy-derp></derpy-derp>
 ```
 
 ## Linting and formatting
