@@ -11,11 +11,11 @@ const TrackballControls = BuildTrackballControls(THREE);
 
 import Detector from "./Detector.js";
 
-const ImageLoader = function ( manager ) {
-  this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
-}
+class ImageLoader {
+  constructor(manager) {
+    this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+  }
 
-Object.assign(ImageLoader.prototype, {
   load ( url, onLoad, onProgress, onError ) {
     const scope = this;
 
@@ -39,23 +39,23 @@ Object.assign(ImageLoader.prototype, {
     scope.manager.itemStart( url );
 
     return image;
-  },
+  }
 
   setCrossOrigin ( value ) {
     this.crossOrigin = value;
     return this;
-  },
+  }
 
   setWithCredentials ( value ) {
     this.withCredentials = value;
     return this;
-  },
+  }
 
   setPath ( value ) {
     this.path = value;
     return this;
   }
-});
+};
 
 export default function(container, sourceSet, background, specular, fullscreen, inside) {
     // Get current globe slug from URL
