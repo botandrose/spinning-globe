@@ -45,7 +45,7 @@ export class SpinningGlobe extends LitElement {
 
   render() {
     return html`
-      <div data-globe-app="true" v-cloak>
+      <div id="element" v-cloak>
         <div class="loading-screen" v-if="isLoading">
           <div class="loading-screen__loader" v-bind:style="{ width: loading }">Loading...</div>
         </div>

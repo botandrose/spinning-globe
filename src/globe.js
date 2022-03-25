@@ -11,8 +11,6 @@ const TrackballControls = BuildTrackballControls(THREE);
 
 import Detector from "./Detector.js";
 
-window.process = {}
-
 const ImageLoader = function ( manager ) {
   this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
 }
@@ -82,18 +80,7 @@ export default function(container, sourceSet, background, specular, fullscreen, 
     const width = window.innerWidth;
     const height = !fullscreen && isMobile ? 300 : window.innerHeight;
 
-    // Globe configurations
-    const globeConfig = {
-      name: "",
-      radius,
-      segments,
-      map,
-      bumpMap: null,
-      bumpScale: 0.0008,
-      specular,
-    };
-
-    const element = container.querySelector("[data-globe-app]");
+    const element = container.querySelector("#element");
     const webglEl = container.querySelector("#webgl");
     // Set up Vue instance
     const vueApp = new Vue({
@@ -150,7 +137,15 @@ export default function(container, sourceSet, background, specular, fullscreen, 
       scene.add(light);
     }
 
-    const sphere = createSphere(globeConfig);
+    const sphere = createSphere({
+      radius,
+      segments,
+      map,
+      bumpMap: null,
+      bumpScale: 0.0008,
+      specular,
+    });
+
     sphere.rotation.y = rotation;
     sphere.material.transparent = true;
     if (inside) {
@@ -220,7 +215,7 @@ export default function(container, sourceSet, background, specular, fullscreen, 
 
         // onError callback
         (event) => {
-          console.error('An error happened.');
+          console.error(`An error occurred loading ${args.map}`);
         }
       );
 
