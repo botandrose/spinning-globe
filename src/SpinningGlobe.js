@@ -1,4 +1,6 @@
 import { html, css, LitElement } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
+
 import globe from './globe.js';
 
 export class SpinningGlobe extends LitElement {
@@ -69,18 +71,18 @@ export class SpinningGlobe extends LitElement {
     `;
   }
 
-  static get properties() {
-    return {
-      srcset: { type: String },
-      background: { type: String },
-      specular: { type: Number },
-      inside: { converter: value => ["inside", "true"].includes(value) },
-    };
+  static properties = {
+    srcset: { type: String },
+    background: { type: String },
+    specular: { type: Number },
+    inside: { converter: value => ["inside", "true"].includes(value) },
+    _loading: { state: true },
   }
 
   constructor() {
     super();
     this.specular = 7;
+    this._loading = 0;
   }
 
   connectedCallback() {
@@ -100,11 +102,15 @@ export class SpinningGlobe extends LitElement {
   }
 
   render() {
+    console.log('rendering');
+    console.log(this._loading);
     return html`
-      <div id="element" v-cloak>
-        <div class="loading-screen" v-if="isLoading">
-          <div class="loading-screen__loader" v-bind:style="{ width: loading }">Loading...</div>
-        </div>
+      <div id="element">
+        ${this._loading < 100 ? html`
+          <div class="loading-screen">
+            <div class="loading-screen__loader" style="${styleMap({ width: this._loading + '%' })}">Loading...</div>
+          </div>
+        ` : ''}
       </div>
       <div id="webgl"></div>
     `;

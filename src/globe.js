@@ -1,5 +1,4 @@
 import device from "current-device";
-import Vue from "vue/dist/vue.esm.browser";
 
 import * as THREE from 'three';
 
@@ -38,23 +37,6 @@ export default function(container, sourceSet, background, specular, inside) {
 
     var map = fullscreen && !isMobile && !isPretendingToBeDesktop ? (hiresMap || loresMap) : (loresMap || hiresMap);
     if(fullscreen && isFirefox) { map = medresMap; }
-
-    // Set up Vue instance
-    const vueApp = new Vue({
-      el: element,
-      data: {
-        loading: 0,
-        isLoading: true,
-      },
-      methods: {
-        updateLoading(percent) {
-          this.$data.loading = `${percent}%`;
-        },
-        hideLoading() {
-          this.$data.isLoading = false;
-        }
-      }
-    });
 
     // Set up Three JS scene and objects
     if (!Detector.webgl) {
@@ -163,12 +145,11 @@ export default function(container, sourceSet, background, specular, inside) {
           ctx.drawImage(image, 0, 0);
 
           scene.add(sphere);
-          vueApp.hideLoading();
         },
 
         (event) => {
           const percent = event.loaded / event.total * 100;
-          vueApp.updateLoading(percent);
+          container._loading = percent;
         },
 
         (event) => {
