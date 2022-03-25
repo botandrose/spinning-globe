@@ -96,7 +96,9 @@ export default function(container, sourceSet, background, specular, inside) {
 
     const controls = inside ? new OrbitControls(camera, webglEl) : new TrackballControls(camera, webglEl);
 
-    // window.addEventListener('resize', onWindowResize, false);
+    new ResizeObserver(entries => {
+      onResize();
+    }).observe(container);
 
     render();
 
@@ -184,9 +186,9 @@ export default function(container, sourceSet, background, specular, inside) {
       );
     }
 
-    function onWindowResize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
+    function onResize() {
+      camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(container.clientWidth, container.clientHeight);
     }
 };
