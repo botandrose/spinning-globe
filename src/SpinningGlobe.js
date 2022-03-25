@@ -19,7 +19,6 @@ export class SpinningGlobe extends LitElement {
       srcset: { type: String },
       background: { type: String },
       specular: { type: Number },
-      fullscreen: { converter: value => ["fullscreen", "true"].includes(value) },
       inside: { converter: value => ["inside", "true"].includes(value) },
     };
   }
@@ -42,7 +41,7 @@ export class SpinningGlobe extends LitElement {
 
   firstUpdated() {
     super.firstUpdated();
-    globe(this, this.sourceSet, this.background, this.specular, this.fullscreen, this.inside);
+    globe(this, this.sourceSet, this.background, this.specular, this.inside);
   }
 
   render() {

@@ -14,16 +14,13 @@ const ImageLoader = BuildImageLoader(THREE);
 
 import Detector from "./Detector.js";
 
-export default function(container, sourceSet, background, specular, fullscreen, inside) {
-    // Get current globe slug from URL
-    const hiresMap = sourceSet[2];
-    const medresMap = sourceSet[1];
+export default function(container, sourceSet, background, specular, inside) {
     const loresMap = sourceSet[0];
+    const medresMap = sourceSet[1];
+    const hiresMap = sourceSet[2];
     var isMobile = device.mobile();
     var isPretendingToBeDesktop = /iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     var isFirefox = /Firefox/.test(navigator.userAgent);
-    var map = fullscreen && !isMobile && !isPretendingToBeDesktop ? (hiresMap || loresMap) : (loresMap || hiresMap);
-    if(fullscreen && isFirefox) { map = medresMap; }
 
     // Params
 
@@ -37,6 +34,11 @@ export default function(container, sourceSet, background, specular, fullscreen, 
     const width = container.clientWidth;
     const height = container.clientHeight;
 
+    const fullscreen = width > 1000;
+
+    var map = fullscreen && !isMobile && !isPretendingToBeDesktop ? (hiresMap || loresMap) : (loresMap || hiresMap);
+    if(fullscreen && isFirefox) { map = medresMap; }
+
     // Set up Vue instance
     const vueApp = new Vue({
       el: element,
@@ -46,7 +48,7 @@ export default function(container, sourceSet, background, specular, fullscreen, 
       },
       methods: {
         updateLoading(percent) {
-          this.$data.loading = `${percent  }%`;
+          this.$data.loading = `${percent}%`;
         },
         hideLoading() {
           this.$data.isLoading = false;
@@ -148,6 +150,7 @@ export default function(container, sourceSet, background, specular, fullscreen, 
       // load a image resource
       loader.load(
         args.map,
+
         (image) => {
           // use the image, e.g. draw part of it on a canvas
           const imgw = image.width;
@@ -168,7 +171,6 @@ export default function(container, sourceSet, background, specular, fullscreen, 
           vueApp.updateLoading(percent);
         },
 
-        // onError callback
         (event) => {
           console.error(`An error occurred loading ${args.map}`);
         }
@@ -177,17 +179,13 @@ export default function(container, sourceSet, background, specular, fullscreen, 
       // create THREE texture using the canvas
       const texture = new THREE.CanvasTexture(ctx.canvas);
 
-      // const mapLoader = new THREE.TextureLoader(); // OLD
-
       return new THREE.Mesh(
         new THREE.SphereGeometry(args.radius, args.segments, args.segments),
-
-        // new THREE.MeshBasicMaterial({ // was initially using this but bumpMap and Lights broke
         new THREE.MeshPhongMaterial({
           map: texture,
           bumpMap: args.bumpMap ? new THREE.TextureLoader().load(args.bumpMap) : null,
           bumpScale: args.bumpScale,
-          specular: new THREE.Color("grey"), // OLD
+          specular: new THREE.Color("grey"),
           shininess: args.specular,
         })
       );
