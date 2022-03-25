@@ -77,21 +77,16 @@ Object.assign(ImageLoader.prototype, {
 } );
 
 
-export default function(element) {
-  element.querySelectorAll("[data-globe]").forEach((container) => {
+export default function(container, sourceSet, background, specular, fullscreen, inside) {
     // Get current globe slug from URL
     const globeKey = "globe";
-    const hiresMap = container.getAttribute("data-globe");
-    const medresMap = container.getAttribute("data-globe-medres");
-    const loresMap = container.getAttribute("data-globe-lores");
-    const specular = parseFloat(container.getAttribute("data-globe-specular") || 30);
-    const fullscreen = container.getAttribute("data-globe-fullscreen") === "true";
-    const isInside = container.getAttribute("data-globe-inside") === "true";
-    const starImagePath = container.getAttribute("data-globe-background");
+    const hiresMap = sourceSet[2];
+    const medresMap = sourceSet[1];
+    const loresMap = sourceSet[0];
     var isMobile = device.mobile();
     var isPretendingToBeDesktop = /iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     var isFirefox = /Firefox/.test(navigator.userAgent);
-    var map = fullscreen && !isMobile && !isPretendingToBeDesktop ? hiresMap : loresMap;
+    var map = fullscreen && !isMobile && !isPretendingToBeDesktop ? (hiresMap || loresMap) : (loresMap || hiresMap);
     if(fullscreen && isFirefox) { map = medresMap; }
 
     // Params
@@ -178,14 +173,14 @@ export default function(element) {
     }
 
     const scene = new THREE.Scene();
-    if (isInside) {
+    if (inside) {
       scene.add(new THREE.AmbientLight(0xcccccc));
     } else {
       scene.add(new THREE.AmbientLight(0x333333));
     }
 
     // Make camera position responsive to browser width
-    const cameraDepth = 1 / width * 10000 + (isInside ? 80 : 40);
+    const cameraDepth = 1 / width * 10000 + (inside ? 80 : 40);
     if(!fullscreen && isMobile) { cameraDepth -= 20; }
 
     const camera = new THREE.PerspectiveCamera(
@@ -205,22 +200,22 @@ export default function(element) {
 
     const light = new THREE.DirectionalLight(0xffffff, 0.7);
     light.position.set(5, 3, 5);
-    if (!isInside) {
+    if (!inside) {
       scene.add(light);
     }
 
     const spheres = createSpheres(globeConfigs);
     spheres[globeKey].rotation.y = rotation;
     spheres[globeKey].material.transparent = true;
-    if (isInside) {
+    if (inside) {
       spheres[globeKey].material.side = THREE.BackSide;
     }
     // scene.add(spheres[globeKey]);
 
-    const stars = createStars(90, 64, starImagePath);
+    const stars = createStars(90, 64, background);
     scene.add(stars);
 
-    const controls = isInside ? new OrbitControls(camera, webglEl) : new TrackballControls(camera, webglEl);
+    const controls = inside ? new OrbitControls(camera, webglEl) : new TrackballControls(camera, webglEl);
 
     // window.addEventListener('resize', onWindowResize, false);
 
@@ -285,7 +280,7 @@ export default function(element) {
         },
 
         // onError callback
-        () => {
+        (event) => {
           console.error('An error happened.');
         }
       );
@@ -323,8 +318,8 @@ export default function(element) {
       return result;
     }
 
-    function createStars(radius, segments, starImagePath) {
-      const texture = new THREE.TextureLoader().load(starImagePath);
+    function createStars(radius, segments, background) {
+      const texture = new THREE.TextureLoader().load(background);
       const material = new THREE.MeshBasicMaterial({
         side: THREE.BackSide,
         map: texture,
@@ -402,5 +397,4 @@ export default function(element) {
       tweenOpacity.start();
       return tweenOpacity;
     }
-  });
 };

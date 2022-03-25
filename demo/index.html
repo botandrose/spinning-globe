@@ -7,19 +7,16 @@
       background: #fafafa;
     }
   </style>
-  <script type="module" src='../spinning-globe.js'></script>
+  <script type="module" src='../index.js'></script>
 </head>
 <body>
   <div id="demo">
     <spinning-globe
-      srcset="
-        https://rumseyglobes.s3-us-west-2.amazonaws.com/MoonBW_4k.jpg 4k,
-        https://rumseyglobes.s3-us-west-2.amazonaws.com/MoonBW_8k.jpg 8k,
-        https://rumseyglobes.s3-us-west-2.amazonaws.com/MoonBW_16k.jpg 16k,
-      "
+      srcset="./MoonBW_2k.jpg 2k"
       background="./galaxy-starfield.png"
       specular="7"
       fullscreen="fullscreen"
+      inside="false"
     ></spinning-globe>
   </div>
 </body>
