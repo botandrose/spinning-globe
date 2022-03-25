@@ -5,9 +5,11 @@ export class SpinningGlobe extends LitElement {
   static get styles() {
     return css`
       :host {
-        display: block;
-        padding: 25px;
+        display: inline-block;
         color: var(--spinning-globe-text-color, #000);
+      }
+      #webgl {
+        height: 100%;
       }
     `;
   }

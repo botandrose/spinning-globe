@@ -31,11 +31,12 @@ export default function(container, sourceSet, background, specular, fullscreen, 
     const rotationSpeed = 0.0005;
     const waitTimeAfterInteraction = 10000;
 
-    const width = window.innerWidth;
-    const height = !fullscreen && isMobile ? 300 : window.innerHeight;
-
     const element = container.querySelector("#element");
     const webglEl = container.querySelector("#webgl");
+
+    const width = webglEl.clientWidth;
+    const height = webglEl.clientHeight;
+
     // Set up Vue instance
     const vueApp = new Vue({
       el: element,
@@ -111,7 +112,7 @@ export default function(container, sourceSet, background, specular, fullscreen, 
 
     const controls = inside ? new OrbitControls(camera, webglEl) : new TrackballControls(camera, webglEl);
 
-    window.addEventListener('resize', onWindowResize, false);
+    // window.addEventListener('resize', onWindowResize, false);
 
     render();
 
