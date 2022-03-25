@@ -102,8 +102,6 @@ export class SpinningGlobe extends LitElement {
   }
 
   render() {
-    console.log('rendering');
-    console.log(this._loading);
     return html`
       <div id="element">
         ${this._loading < 100 ? html`

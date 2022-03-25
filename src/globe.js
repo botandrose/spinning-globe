@@ -140,7 +140,6 @@ export default function(container, sourceSet, background, specular, inside) {
           // make the canvas big enough
           ctx.canvas.width = imgw;
           ctx.canvas.height = imgh;
-          console.log(imgw, imgh);
           // add image to canvas
           ctx.drawImage(image, 0, 0);
 
