@@ -162,7 +162,7 @@ export default function(container, sourceSet, background, specular, fullscreen, 
 
     const controls = inside ? new OrbitControls(camera, webglEl) : new TrackballControls(camera, webglEl);
 
-    // window.addEventListener('resize', onWindowResize, false);
+    window.addEventListener('resize', onWindowResize, false);
 
     render();
 
