@@ -18,22 +18,15 @@ const ImageLoader = function ( manager ) {
 }
 
 Object.assign(ImageLoader.prototype, {
-
   load ( url, onLoad, onProgress, onError ) {
-
     const scope = this;
 
-    const image = document.createElementNS( 'http://www.w3.org/1999/xhtml', 'img' );
+    const image = document.createElementNS('http://www.w3.org/1999/xhtml', 'img');
     image.onload = function () {
-
       image.onload = null;
-
       URL.revokeObjectURL( image.src );
-
       if ( onLoad ) onLoad( image );
-
       scope.manager.itemEnd( url );
-
     };
     image.onerror = onError;
 
@@ -42,44 +35,32 @@ Object.assign(ImageLoader.prototype, {
     loader.setResponseType( 'blob' );
     loader.setWithCredentials( this.withCredentials );
     loader.load( url, ( blob ) => {
-
       image.src = URL.createObjectURL( blob );
-
     }, onProgress, onError );
 
     scope.manager.itemStart( url );
 
     return image;
-
   },
 
   setCrossOrigin ( value ) {
-
     this.crossOrigin = value;
     return this;
-
   },
 
   setWithCredentials ( value ) {
-
     this.withCredentials = value;
     return this;
-
   },
 
   setPath ( value ) {
-
     this.path = value;
     return this;
-
   }
-
-} );
-
+});
 
 export default function(container, sourceSet, background, specular, fullscreen, inside) {
     // Get current globe slug from URL
-    const globeKey = "globe";
     const hiresMap = sourceSet[2];
     const medresMap = sourceSet[1];
     const loresMap = sourceSet[0];
@@ -102,22 +83,14 @@ export default function(container, sourceSet, background, specular, fullscreen, 
     const height = !fullscreen && isMobile ? 300 : window.innerHeight;
 
     // Globe configurations
-    const globeConfigs = {
-      globe: {
-        name: "",
-        radius,
-        segments,
-        map,
-        bumpMap: null,
-        bumpScale: 0.0008,
-        specular,
-        content: null,
-        imageUrl: null,
-        artist: null,
-        year: null,
-        language: null,
-        url: null,
-      },
+    const globeConfig = {
+      name: "",
+      radius,
+      segments,
+      map,
+      bumpMap: null,
+      bumpScale: 0.0008,
+      specular,
     };
 
     const element = container.querySelector("[data-globe-app]");
@@ -126,12 +99,7 @@ export default function(container, sourceSet, background, specular, fullscreen, 
     const vueApp = new Vue({
       el: element,
       data: {
-        items: globeConfigs,
-        globeKey,
-        title: null,
-        content: null,
-        year: null,
-        language: null,
+        items: globeConfig,
         loading: 0,
         isLoading: true,
         isMoreModalOpen: false,
@@ -204,13 +172,12 @@ export default function(container, sourceSet, background, specular, fullscreen, 
       scene.add(light);
     }
 
-    const spheres = createSpheres(globeConfigs);
-    spheres[globeKey].rotation.y = rotation;
-    spheres[globeKey].material.transparent = true;
+    const sphere = createSphere(globeConfig);
+    sphere.rotation.y = rotation;
+    sphere.material.transparent = true;
     if (inside) {
-      spheres[globeKey].material.side = THREE.BackSide;
+      sphere.material.side = THREE.BackSide;
     }
-    // scene.add(spheres[globeKey]);
 
     const stars = createStars(90, 64, background);
     scene.add(stars);
@@ -226,7 +193,7 @@ export default function(container, sourceSet, background, specular, fullscreen, 
       controls.update();
       // slowly rotate the globe if we haven't touched it recently
       if(!controls.lastTouchAt || new Date() - controls.lastTouchAt > waitTimeAfterInteraction) {
-        spheres[globeKey].rotation.y += rotationSpeed;
+        sphere.rotation.y += rotationSpeed;
       }
 
       // keep light source near camera
@@ -270,7 +237,7 @@ export default function(container, sourceSet, background, specular, fullscreen, 
           // add image to canvas
           ctx.drawImage(image, 0, 0);
 
-          scene.add(spheres[globeKey]);
+          scene.add(sphere);
           vueApp.hideLoading();
         },
 
@@ -307,16 +274,6 @@ export default function(container, sourceSet, background, specular, fullscreen, 
       );
     }
 
-
-    function createSpheres(globeConfigs) {
-      const result = {};
-
-      Object.keys(globeConfigs).forEach((slug) => {
-        result[slug] = createSphere(globeConfigs[slug]);
-      });
-
-      return result;
-    }
 
     function createStars(radius, segments, background) {
       const texture = new THREE.TextureLoader().load(background);
