@@ -27,11 +27,8 @@ export default function(container, sourceSet, background, specular, fullscreen, 
 
     // Params
 
-    const radius = 0.5;
-    const segments = 128;
     const rotation = 15;
     const rotationSpeed = 0.0005;
-    // var rotationSpeed = 0.014;
     const waitTimeAfterInteraction = 10000;
 
     const width = window.innerWidth;
@@ -95,8 +92,8 @@ export default function(container, sourceSet, background, specular, fullscreen, 
     }
 
     const sphere = createSphere({
-      radius,
-      segments,
+      radius: 0.5,
+      segments: 128,
       map,
       bumpMap: null,
       bumpScale: 0.0008,
