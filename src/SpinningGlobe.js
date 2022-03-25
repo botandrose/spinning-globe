@@ -42,7 +42,7 @@ export class SpinningGlobe extends LitElement {
 
   firstUpdated() {
     super.firstUpdated();
-    globe(this.renderRoot, this.sourceSet, this.background, this.specular, this.fullscreen, this.inside);
+    globe(this, this.sourceSet, this.background, this.specular, this.fullscreen, this.inside);
   }
 
   render() {

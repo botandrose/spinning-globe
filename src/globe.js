@@ -31,11 +31,11 @@ export default function(container, sourceSet, background, specular, fullscreen, 
     const rotationSpeed = 0.0005;
     const waitTimeAfterInteraction = 10000;
 
-    const element = container.querySelector("#element");
-    const webglEl = container.querySelector("#webgl");
+    const element = container.renderRoot.querySelector("#element");
+    const webglEl = container.renderRoot.querySelector("#webgl");
 
-    const width = webglEl.clientWidth;
-    const height = webglEl.clientHeight;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
 
     // Set up Vue instance
     const vueApp = new Vue({
