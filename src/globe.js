@@ -99,32 +99,10 @@ export default function(container, sourceSet, background, specular, fullscreen, 
     const vueApp = new Vue({
       el: element,
       data: {
-        items: globeConfig,
         loading: 0,
         isLoading: true,
-        isMoreModalOpen: false,
-        isAboutModalOpen: false,
-        isGlobeMenuOpen: false
       },
       methods: {
-        toggleMoreModal() {
-          this.$data.isMoreModalOpen = !this.$data.isMoreModalOpen;
-          this.$data.isAboutModalOpen = false;
-          this.$data.isGlobeMenuOpen = false;
-        },
-        toggleAboutModal() {
-          this.$data.isAboutModalOpen = !this.$data.isAboutModalOpen;
-          this.$data.isMoreModalOpen = false;
-          this.$data.isGlobeMenuOpen = false;
-        },
-        toggleGlobeMenu() {
-          this.$data.isGlobeMenuOpen = !this.$data.isGlobeMenuOpen;
-        },
-        closeModals() {
-          this.$data.isAboutModalOpen = false;
-          this.$data.isMoreModalOpen = false;
-          this.$data.isGlobeMenuOpen = false;
-        },
         updateLoading(percent) {
           this.$data.loading = `${percent  }%`;
         },
@@ -214,12 +192,6 @@ export default function(container, sourceSet, background, specular, fullscreen, 
       renderer.render(scene, camera);
     }
 
-    function requestCORSIfNotSameOrigin(img, url) {
-      if ((new URL(url, window.location.href)).origin !== window.location.origin) {
-        img.crossOrigin = "";
-      }
-    }
-
     function createSphere(args) {
       const ctx = document.createElement("canvas").getContext("2d");
       const loader = new ImageLoader();
@@ -251,9 +223,6 @@ export default function(container, sourceSet, background, specular, fullscreen, 
           console.error('An error happened.');
         }
       );
-
-      // set the image (triggering the above onload)
-      // requestCORSIfNotSameOrigin(img1, args.map);
 
       // create THREE texture using the canvas
       const texture = new THREE.CanvasTexture(ctx.canvas);
@@ -291,67 +260,5 @@ export default function(container, sourceSet, background, specular, fullscreen, 
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-
-    // Get query variable from URL
-    function getQueryVariable(variable) {
-      const query = window.location.search.substring(1);
-      const vars = query.split('&');
-      for (let i = 0; i < vars.length; i++) {
-        const pair = vars[i].split('=');
-        if (pair[0] == variable) {
-          return pair[1];
-        }
-      }
-      return false;
-    }
-
-    // Animation Functions
-    function trackOriginalOpacities(mesh) {
-      const opacities = [];
-        const materials = mesh.material.materials
-        ? mesh.material.materials
-        : [mesh.material];
-      for (let i = 0; i < materials.length; i++) {
-        materials[i].transparent = true;
-        opacities.push(materials[i].opacity);
-      }
-      mesh.userData.originalOpacities = opacities;
-    }
-
-    function fadeMesh(mesh, direction, options) {
-      options = options || {};
-      // set and check
-      const current = { percentage: direction == 'in' ? 1 : 0 };
-        // this check is used to work with normal and multi materials.
-        const mats = mesh.material.materials
-        ? mesh.material.materials
-        : [mesh.material];
-        const originals = mesh.userData.originalOpacities;
-        const easing = options.easing || TWEEN.Easing.Linear.None;
-        const duration = options.duration || 2000;
-      // check to make sure originals exist
-      if (!originals) {
-        console.error(
-          'Fade error: originalOpacities not defined, use trackOriginalOpacities'
-        );
-        return;
-      }
-      // tween opacity back to originals
-      const tweenOpacity = new TWEEN.Tween(current)
-        .to({ percentage: direction == 'in' ? 0 : 1 }, duration)
-        .easing(easing)
-        .onUpdate(() => {
-          for (let i = 0; i < mats.length; i++) {
-            mats[i].opacity = originals[i] * current.percentage;
-          }
-        })
-        .onComplete(() => {
-          if (options.callback) {
-            options.callback();
-          }
-        });
-      tweenOpacity.start();
-      return tweenOpacity;
     }
 };
