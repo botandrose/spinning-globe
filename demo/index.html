@@ -3,9 +3,15 @@
 <head>
   <meta charset="utf-8">
   <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
     #globe {
-      width: 400px;
-      height: 400px;
+      width: 100%;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
     }
   </style>
   <script type="module" src='../index.js'></script>
@@ -14,7 +20,7 @@
   <div id="demo">
     <spinning-globe
       id="globe"
-      srcset="https://rumseyglobes.s3-us-west-2.amazonaws.com/MoonBW.jpg 16k"
+      srcset="./MoonBW_2k.jpg 2k"
       background="./galaxy-starfield.png"
       specular="7"
       fullscreen="fullscreen"
