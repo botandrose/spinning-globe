@@ -66,7 +66,8 @@ export default function(container, sourceSet, background, specular, inside) {
     camera.minFov = 5;
     camera.maxFov = cameraDepth;
 
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setClearColor(0xffffff, 0);
     renderer.setSize(width, height);
     webglEl.appendChild(renderer.domElement);
 
@@ -91,8 +92,10 @@ export default function(container, sourceSet, background, specular, inside) {
       sphere.material.side = THREE.BackSide;
     }
 
-    const stars = createStars(90, 64, background);
-    scene.add(stars);
+    if(background) {
+      const stars = createStars(90, 64, background);
+      scene.add(stars);
+    }
 
     const controls = inside ? new OrbitControls(camera, webglEl) : new TrackballControls(camera, webglEl);
 
