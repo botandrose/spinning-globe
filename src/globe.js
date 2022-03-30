@@ -57,8 +57,14 @@ export default function(container, sourceSet, background, specular, inside) {
     function calculateFov() {
       const width = container.clientWidth * window.devicePixelRatio;
       const height = container.clientHeight * window.devicePixelRatio;
-      let constraint = width < height ? width : height;
-      let fov = 169.934 * Math.pow(0.998766, constraint);
+      let fov;
+      if(height < width) {
+        fov = 42.7858 * Math.pow(1.00017, height);
+        // console.log(`HEIGHT: ${height} = ${fov}`);
+      } else {
+        fov = 147.422 * Math.pow(0.998832, width);
+        // console.log(`WIDTH: ${width} = ${fov}`);
+      }
       return fov;
     }
 
