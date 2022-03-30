@@ -30,8 +30,8 @@ export default function(container, sourceSet, background, specular, inside) {
     const element = container.renderRoot.querySelector("#element");
     const webglEl = container.renderRoot.querySelector("#webgl");
 
-    const width = container.clientWidth * window.devicePixelRatio;
-    const height = container.clientHeight * window.devicePixelRatio;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
 
     const fullscreen = width > 1000;
 
@@ -199,8 +199,8 @@ export default function(container, sourceSet, background, specular, inside) {
 
     function onResize() {
       camera.aspect = container.clientWidth / container.clientHeight;
-      camera.updateProjectionMatrix();
       camera.fov = calculateFov()
+      camera.updateProjectionMatrix();
       renderer.setSize(container.clientWidth, container.clientHeight);
     }
 };
