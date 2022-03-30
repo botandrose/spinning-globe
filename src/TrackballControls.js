@@ -489,7 +489,6 @@ function wrapper(THREE) {
       switch ( event.touches.length ) {
 
         case 1:
-          console.log(event.touches[0].clientX, event.touches[0].clientY)
           _rotateEnd = _this.getMouseProjectionOnBall( event.touches[ 0 ].clientX, event.touches[ 0 ].clientY );
           break;
 

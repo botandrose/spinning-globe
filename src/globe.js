@@ -52,12 +52,18 @@ export default function(container, sourceSet, background, specular, inside) {
     }
 
     // Make camera position responsive to browser sizes
-    var distance = 1.5
-    let constraint = width < height ? width : height
-    var cameraDepth = 2 * Math.atan((constraint / 900) / (2 * distance)) * (180 / Math.PI);
+    const distance = 1.5
+
+    function calculateFov() {
+      const width = container.clientWidth * window.devicePixelRatio;
+      const height = container.clientHeight * window.devicePixelRatio;
+      let constraint = width < height ? width : height;
+      let fov = 169.934 * Math.pow(0.998766, constraint);
+      return fov;
+    }
 
     const camera = new THREE.PerspectiveCamera(
-      cameraDepth,
+      calculateFov(),
       width / height,
       0.01,
       1000
@@ -65,7 +71,7 @@ export default function(container, sourceSet, background, specular, inside) {
     camera.position.z = distance;
     camera.position.y = 0.2;
     camera.minFov = 5;
-    camera.maxFov = cameraDepth;
+    camera.maxFov = 90;
 
     const renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setClearColor(0xffffff, 0);
@@ -194,6 +200,7 @@ export default function(container, sourceSet, background, specular, inside) {
     function onResize() {
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
+      camera.fov = calculateFov()
       renderer.setSize(container.clientWidth, container.clientHeight);
     }
 };
