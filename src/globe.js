@@ -30,8 +30,8 @@ export default function(container, sourceSet, background, specular, inside) {
     const element = container.renderRoot.querySelector("#element");
     const webglEl = container.renderRoot.querySelector("#webgl");
 
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+    const width = container.clientWidth * window.devicePixelRatio;
+    const height = container.clientHeight * window.devicePixelRatio;
 
     const fullscreen = width > 1000;
 
@@ -51,9 +51,10 @@ export default function(container, sourceSet, background, specular, inside) {
       scene.add(new THREE.AmbientLight(0x333333));
     }
 
-    // Make camera position responsive to browser width
-    const cameraDepth = 1 / width * 10000 + (inside ? 80 : 40);
-    if(!fullscreen && isMobile) { cameraDepth -= 20; }
+    // Make camera position responsive to browser sizes
+    var distance = 1.5
+    let constraint = width < height ? width : height
+    var cameraDepth = 2 * Math.atan((constraint / 900) / (2 * distance)) * (180 / Math.PI);
 
     const camera = new THREE.PerspectiveCamera(
       cameraDepth,
@@ -61,7 +62,7 @@ export default function(container, sourceSet, background, specular, inside) {
       0.01,
       1000
     );
-    camera.position.z = 1.5;
+    camera.position.z = distance;
     camera.position.y = 0.2;
     camera.minFov = 5;
     camera.maxFov = cameraDepth;
@@ -102,6 +103,7 @@ export default function(container, sourceSet, background, specular, inside) {
     new ResizeObserver(entries => {
       onResize();
     }).observe(container);
+    onResize();
 
     render();
 
