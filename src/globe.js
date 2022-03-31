@@ -59,10 +59,14 @@ export default function(container, sourceSet, background, specular, inside) {
     const height = container.clientHeight / window.devicePixelRatio;
     let fov;
     if(height < width) {
-      fov = 42.7858 * Math.pow(1.00017, height);
+      fov = 42.7858 * Math.pow(1.00005, height);
       console.log(`HEIGHT: ${height} = ${fov}; ${window.devicePixelRatio}`);
     } else {
-      fov = 147.422 * Math.pow(0.998832, width);
+      if(window.devicePixelRatio > 1) {
+        fov = 147.422 * Math.pow(0.9981, width);
+      } else {
+        fov = 147.422 * Math.pow(0.998832, width);
+      }
       console.log(`WIDTH: ${width} = ${fov}; ${window.devicePixelRatio}`);
     }
 
