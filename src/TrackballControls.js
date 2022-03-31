@@ -143,17 +143,17 @@ function wrapper(THREE) {
     };
 
     this.zoomCamera = function () {
+      var factor;
       if ( _state === STATE.TOUCH_ZOOM ) {
-        var factor = _touchZoomDistanceStart / _touchZoomDistanceEnd;
+        factor = _touchZoomDistanceStart / _touchZoomDistanceEnd;
         _touchZoomDistanceStart = _touchZoomDistanceEnd;
-        _eye.multiplyScalar( factor );
-      } else {
-        var factor = 1.0 + ( _zoomEnd.y - _zoomStart.y ) * _this.zoomSpeed;
         if ( factor !== 1.0 && factor > 0.0 ) {
-          this.object.fov *= factor;
-          if ( this.object.fov < this.object.minFov ) { this.object.fov = this.object.minFov; }
-          if ( this.object.fov > this.object.maxFov ) { this.object.fov = this.object.maxFov; }
-          this.object.updateProjectionMatrix();
+          this.zoomFov(factor);
+        }
+      } else {
+        factor = 1.0 + ( _zoomEnd.y - _zoomStart.y ) * _this.zoomSpeed;
+        if ( factor !== 1.0 && factor > 0.0 ) {
+          this.zoomFov(factor);
 
           if ( _this.staticMoving ) {
             _zoomStart.copy( _zoomEnd );
@@ -163,6 +163,13 @@ function wrapper(THREE) {
         }
       }
     };
+
+    this.zoomFov = function(factor) {
+      this.object.fov *= factor;
+      if ( this.object.fov < this.object.minFov ) { this.object.fov = this.object.minFov; }
+      if ( this.object.fov > this.object.maxFov ) { this.object.fov = this.object.maxFov; }
+      this.object.updateProjectionMatrix();
+    }
 
     this.panCamera = function () {
       const mouseChange = _panEnd.clone().sub( _panStart );
