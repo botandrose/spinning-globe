@@ -1,6 +1,6 @@
 import { LitElement } from 'lit';
 import { css, html } from './template.js';
-
+import device from "current-device";
 import globe from './globe.js';
 
 export class SpinningGlobe extends LitElement {
@@ -25,6 +25,7 @@ export class SpinningGlobe extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.sourceSet = this.__parseSrcset();
+    this.texture =  this.__chooseTexture();
   }
 
   __parseSrcset() {
@@ -34,9 +35,24 @@ export class SpinningGlobe extends LitElement {
       .filter(a => a);
   }
 
+  __chooseTexture() {
+    const loresMap = this.sourceSet[0];
+    const medresMap = this.sourceSet[1];
+    const hiresMap = this.sourceSet[2];
+    const isMobile = device.mobile();
+    const isPretendingToBeDesktop = /iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isFirefox = /Firefox/.test(navigator.userAgent);
+
+    const width = this.clientWidth;
+    const fullscreen = width > 1000;
+    let map = fullscreen && !isMobile && !isPretendingToBeDesktop ? (hiresMap || loresMap) : (loresMap || hiresMap);
+    if(fullscreen && isFirefox) { map = medresMap; }
+    return map;
+  }
+
   firstUpdated() {
     super.firstUpdated();
-    globe(this, this.sourceSet, this.background, this.specular, this.inside);
+    globe(this, this.texture, this.background, this.specular, this.inside);
   }
 
   render() {

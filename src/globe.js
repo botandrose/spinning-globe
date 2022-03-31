@@ -1,5 +1,3 @@
-import device from "current-device";
-
 import * as THREE from 'three';
 
 import Camera from './Camera.js';
@@ -8,14 +6,7 @@ import TrackballControls from "./TrackballControls.js";
 import ImageLoader from "./ImageLoader.js";
 import WebGLDetector from "./WebGLDetector.js";
 
-export default function globe(container, sourceSet, background, specular, inside) {
-  const loresMap = sourceSet[0];
-  const medresMap = sourceSet[1];
-  const hiresMap = sourceSet[2];
-  const isMobile = device.mobile();
-  const isPretendingToBeDesktop = /iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const isFirefox = /Firefox/.test(navigator.userAgent);
-
+export default function globe(container, map, background, specular, inside) {
   // Params
 
   const rotation = 15;
@@ -26,11 +17,6 @@ export default function globe(container, sourceSet, background, specular, inside
 
   const width = container.clientWidth;
   const height = container.clientHeight;
-
-  const fullscreen = width > 1000;
-
-  let map = fullscreen && !isMobile && !isPretendingToBeDesktop ? (hiresMap || loresMap) : (loresMap || hiresMap);
-  if(fullscreen && isFirefox) { map = medresMap; }
 
   // Set up Three JS scene and objects
   if (!WebGLDetector.webgl) {
@@ -46,26 +32,7 @@ export default function globe(container, sourceSet, background, specular, inside
   }
 
   // Make camera position responsive to browser sizes
-  const distance = 1.5
-
-  function calculateFov(camera) {
-    const newWidth = container.clientWidth / window.devicePixelRatio;
-    const newHeight = container.clientHeight / window.devicePixelRatio;
-
-    let fov;
-    if(newHeight < newWidth) {
-      fov = 42.7858 * 1.00005 ** newHeight;
-      // console.log(`HEIGHT: ${newHeight} = ${fov}; ${window.devicePixelRatio}`);
-    } else {
-      const base = window.devicePixelRatio > 1 ? 0.9981 : 0.998832;
-      fov = 147.422 * base ** newWidth;
-      // console.log(`WIDTH: ${newWidth} = ${fov}; ${window.devicePixelRatio}`);
-    }
-
-    camera.fov = fov;
-    camera.minFov = fov / 5.0;
-    camera.maxFov = fov * 1.5;
-  }
+  const distance = 1.5;
 
   const camera = new Camera(
     45,
