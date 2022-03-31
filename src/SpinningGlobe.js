@@ -52,7 +52,11 @@ export class SpinningGlobe extends LitElement {
 
   firstUpdated() {
     super.firstUpdated();
-    globe(this, this.texture, this.background, this.specular, this.inside);
+    this.webglEl = this.renderRoot.querySelector("#webgl");
+    globe(this.webglEl, this.texture, this.background, this.specular, this.inside, (event) => {
+      const percent = event.loaded / event.total * 100;
+      this._loading = percent;
+    });
   }
 
   render() {

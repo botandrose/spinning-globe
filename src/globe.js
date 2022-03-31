@@ -6,21 +6,18 @@ import TrackballControls from "./TrackballControls.js";
 import ImageLoader from "./ImageLoader.js";
 import WebGLDetector from "./WebGLDetector.js";
 
-export default function globe(container, map, background, specular, inside) {
+export default function globe(element, texture, background, specular, inside, loadingCallback) {
   // Params
-
   const rotation = 15;
   const rotationSpeed = 0.0005;
   const waitTimeAfterInteraction = 10000;
 
-  const webglEl = container.renderRoot.querySelector("#webgl");
-
-  const width = container.clientWidth;
-  const height = container.clientHeight;
+  const width = element.clientWidth;
+  const height = element.clientHeight;
 
   // Set up Three JS scene and objects
   if (!WebGLDetector.webgl) {
-    WebGLDetector.addGetWebGLMessage(webglEl);
+    WebGLDetector.addGetWebGLMessage(element);
     return;
   }
 
@@ -43,12 +40,12 @@ export default function globe(container, map, background, specular, inside) {
   camera.position.x = 0;
   camera.position.y = 0.2;
   camera.position.z = distance;
-  camera.calculateFov(container.clientWidth, container.clientHeight, window.devicePixelRatio);
+  camera.calculateFov(element.clientWidth, element.clientHeight, window.devicePixelRatio);
 
   const renderer = new THREE.WebGLRenderer({ alpha: true });
   renderer.setClearColor(0xffffff, 0);
   renderer.setSize(width, height);
-  webglEl.appendChild(renderer.domElement);
+  element.appendChild(renderer.domElement);
 
   const light = new THREE.DirectionalLight(0xffffff, 0.7);
   light.position.set(5, 3, 5);
@@ -59,7 +56,7 @@ export default function globe(container, map, background, specular, inside) {
   const sphere = createSphere({
     radius: 0.5,
     segments: 128,
-    map,
+    texture,
     bumpMap: null,
     bumpScale: 0.0008,
     specular,
@@ -76,11 +73,11 @@ export default function globe(container, map, background, specular, inside) {
     scene.add(stars);
   }
 
-  const controls = inside ? new OrbitControls(camera, webglEl) : new TrackballControls(camera, webglEl);
+  const controls = inside ? new OrbitControls(camera, element) : new TrackballControls(camera, element);
 
   new ResizeObserver(entries => {
     onResize();
-  }).observe(container);
+  }).observe(element);
   onResize();
 
   render();
@@ -116,7 +113,7 @@ export default function globe(container, map, background, specular, inside) {
     const loader = new ImageLoader();
     // load a image resource
     loader.load(
-      args.map,
+      args.texture,
 
       (image) => {
         // use the image, e.g. draw part of it on a canvas
@@ -131,13 +128,10 @@ export default function globe(container, map, background, specular, inside) {
         scene.add(sphere);
       },
 
-      (event) => {
-        const percent = event.loaded / event.total * 100;
-        container._loading = percent;
-      },
+      loadingCallback,
 
       (event) => {
-        console.error(`An error occurred loading ${args.map}`);
+        console.error(`An error occurred loading ${args.texture}`);
       }
     );
 
@@ -156,7 +150,6 @@ export default function globe(container, map, background, specular, inside) {
     );
   }
 
-
   function createStars(radius, segments, background) {
     const texture = new THREE.TextureLoader().load(background);
     const material = new THREE.MeshBasicMaterial({
@@ -170,9 +163,9 @@ export default function globe(container, map, background, specular, inside) {
   }
 
   function onResize() {
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.calculateFov(container.clientWidth, container.clientHeight, window.devicePixelRatio);
+    camera.aspect = element.clientWidth / element.clientHeight;
+    camera.calculateFov(element.clientWidth, element.clientHeight, window.devicePixelRatio);
     camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setSize(element.clientWidth, element.clientHeight);
   }
 };
