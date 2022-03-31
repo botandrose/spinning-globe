@@ -143,7 +143,7 @@ function wrapper(THREE) {
     };
 
     this.zoomCamera = function () {
-      var factor;
+      let factor;
       if ( _state === STATE.TOUCH_ZOOM ) {
         factor = _touchZoomDistanceStart / _touchZoomDistanceEnd;
         _touchZoomDistanceStart = _touchZoomDistanceEnd;

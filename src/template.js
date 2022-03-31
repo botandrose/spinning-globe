@@ -71,7 +71,7 @@ function html(loading) {
       <div class="loading-screen">
         <div
           class="loading-screen__loader"
-          style="${styleMap({ width: loading + '%' })}"
+          style="${styleMap({ width: `${loading}%` })}"
         >
           Loading...
         </div>

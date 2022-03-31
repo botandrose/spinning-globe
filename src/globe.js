@@ -3,23 +3,24 @@ import device from "current-device";
 import * as THREE from 'three';
 
 import BuildOrbitControls from "./OrbitControls.js";
-const OrbitControls = BuildOrbitControls(THREE);
 
 import BuildTrackballControls from "./TrackballControls.js";
-const TrackballControls = BuildTrackballControls(THREE);
 
 import BuildImageLoader from "./ImageLoader.js";
-const ImageLoader = BuildImageLoader(THREE);
 
 import Detector from "./Detector.js";
+
+const OrbitControls = BuildOrbitControls(THREE);
+const TrackballControls = BuildTrackballControls(THREE);
+const ImageLoader = BuildImageLoader(THREE);
 
 export default function(container, sourceSet, background, specular, inside) {
   const loresMap = sourceSet[0];
   const medresMap = sourceSet[1];
   const hiresMap = sourceSet[2];
-  var isMobile = device.mobile();
-  var isPretendingToBeDesktop = /iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  var isFirefox = /Firefox/.test(navigator.userAgent);
+  const isMobile = device.mobile();
+  const isPretendingToBeDesktop = /iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isFirefox = /Firefox/.test(navigator.userAgent);
 
   // Params
 
@@ -35,7 +36,7 @@ export default function(container, sourceSet, background, specular, inside) {
 
   const fullscreen = width > 1000;
 
-  var map = fullscreen && !isMobile && !isPretendingToBeDesktop ? (hiresMap || loresMap) : (loresMap || hiresMap);
+  let map = fullscreen && !isMobile && !isPretendingToBeDesktop ? (hiresMap || loresMap) : (loresMap || hiresMap);
   if(fullscreen && isFirefox) { map = medresMap; }
 
   // Set up Three JS scene and objects
