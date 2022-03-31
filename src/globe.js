@@ -55,8 +55,8 @@ export default function(container, sourceSet, background, specular, inside) {
     const distance = 1.5
 
     function calculateFov() {
-      const width = container.clientWidth * window.devicePixelRatio;
-      const height = container.clientHeight * window.devicePixelRatio;
+      const width = container.clientWidth / window.devicePixelRatio;
+      const height = container.clientHeight / window.devicePixelRatio;
       let fov;
       if(height < width) {
         fov = 42.7858 * Math.pow(1.00017, height);
