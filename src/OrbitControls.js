@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 // This set of controls performs orbiting, dollying (zooming), and panning.
 // Unlike TrackballControls, it maintains the "up" direction object.up (+Y by default).
 //
@@ -5,9 +7,9 @@
 //    Zoom - middle mouse, or mousewheel / touch: two-finger spread or squish
 //    Pan - right mouse, or left mouse + ctrl/meta/shiftKey, or arrow keys / touch: two-finger move
 
-function bootstrap(THREE) {
-
-  const OrbitControls = function ( object, domElement ) {
+class OrbitControls extends THREE.EventDispatcher {
+  constructor(object, domElement) {
+    super()
 
     if ( domElement === undefined ) console.warn( 'THREE.OrbitControls: The second parameter "domElement" is now mandatory.' );
     if ( domElement === document ) console.error( 'THREE.OrbitControls: "document" should not be used as the target "domElement". Please use "renderer.domElement" instead.' );
@@ -1188,38 +1190,6 @@ function bootstrap(THREE) {
     this.update();
 
   };
-
-  OrbitControls.prototype = Object.create( THREE.EventDispatcher.prototype );
-  OrbitControls.prototype.constructor = OrbitControls;
-
-
-  // This set of controls performs orbiting, dollying (zooming), and panning.
-  // Unlike TrackballControls, it maintains the "up" direction object.up (+Y by default).
-  // This is very similar to OrbitControls, another set of touch behavior
-  //
-  //    Orbit - right mouse, or left mouse + ctrl/meta/shiftKey / touch: two-finger rotate
-  //    Zoom - middle mouse, or mousewheel / touch: two-finger spread or squish
-  //    Pan - left mouse, or arrow keys / touch: one-finger move
-
-  const MapControls = function ( object, domElement ) {
-
-    OrbitControls.call( this, object, domElement );
-
-    this.screenSpacePanning = false; // pan orthogonal to world-space direction camera.up
-
-    this.mouseButtons.LEFT = THREE.MOUSE.PAN;
-    this.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
-
-    this.touches.ONE = THREE.TOUCH.PAN;
-    this.touches.TWO = THREE.TOUCH.DOLLY_ROTATE;
-
-  };
-
-  MapControls.prototype = Object.create( THREE.EventDispatcher.prototype );
-  MapControls.prototype.constructor = MapControls;
-
-  return OrbitControls;
-
 }
 
-export default bootstrap;
+export default OrbitControls;

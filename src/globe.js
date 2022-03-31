@@ -3,17 +3,10 @@ import device from "current-device";
 import * as THREE from 'three';
 
 import Camera from './Camera.js';
-
-import BuildOrbitControls from "./OrbitControls.js";
-
-import BuildTrackballControls from "./TrackballControls.js";
-
+import OrbitControls from "./OrbitControls.js";
+import TrackballControls from "./TrackballControls.js";
 import ImageLoader from "./ImageLoader.js";
-
-import Detector from "./Detector.js";
-
-const OrbitControls = BuildOrbitControls(THREE);
-const TrackballControls = BuildTrackballControls(THREE);
+import WebGLDetector from "./WebGLDetector.js";
 
 export default function globe(container, sourceSet, background, specular, inside) {
   const loresMap = sourceSet[0];
@@ -40,8 +33,8 @@ export default function globe(container, sourceSet, background, specular, inside
   if(fullscreen && isFirefox) { map = medresMap; }
 
   // Set up Three JS scene and objects
-  if (!Detector.webgl) {
-    Detector.addGetWebGLMessage(webglEl);
+  if (!WebGLDetector.webgl) {
+    WebGLDetector.addGetWebGLMessage(webglEl);
     return;
   }
 

@@ -1,14 +1,13 @@
-/**
- * @author Eberhard Graether / http://egraether.com/
- */
+import * as THREE from 'three';
 
-function wrapper(THREE) {
-  const TrackballControls = function ( object, domElement ) {
+class TrackballControls extends THREE.EventDispatcher {
+  constructor(object, domElement) {
+    super()
     const _this = this;
     const STATE = { NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM: 4, TOUCH_PAN: 5 };
 
     this.object = object;
-    this.domElement = ( domElement !== undefined ) ? domElement : document;
+    this.domElement = domElement ?? document;
 
     // API
 
@@ -428,11 +427,7 @@ function wrapper(THREE) {
     window.addEventListener( 'keyup', keyup, false );
 
     this.handleResize();
-
   };
-
-  TrackballControls.prototype = Object.create( THREE.EventDispatcher.prototype );
-  return TrackballControls;
 }
 
-export default wrapper;
+export default TrackballControls;
