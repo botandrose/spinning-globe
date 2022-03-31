@@ -275,7 +275,11 @@ function wrapper(THREE) {
 
       if ( _state === STATE.NONE ) {
         _state = event.button;
-      } else if ( _state === STATE.ROTATE && !_this.noRotate ) {
+
+      }
+
+      if ( _state === STATE.ROTATE && !_this.noRotate ) {
+
         _rotateStart = _rotateEnd = _this.getMouseProjectionOnBall( event.clientX, event.clientY );
       } else if ( _state === STATE.ZOOM && !_this.noZoom ) {
         _zoomStart = _zoomEnd = _this.getMouseOnScreen( event.clientX, event.clientY );
@@ -423,7 +427,8 @@ function wrapper(THREE) {
     window.addEventListener( 'keydown', keydown, false );
     window.addEventListener( 'keyup', keyup, false );
 
-    // this.handleResize();
+    this.handleResize();
+
   };
 
   TrackballControls.prototype = Object.create( THREE.EventDispatcher.prototype );
