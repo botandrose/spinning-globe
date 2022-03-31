@@ -2,6 +2,8 @@ import device from "current-device";
 
 import * as THREE from 'three';
 
+import Camera from './Camera.js';
+
 import BuildOrbitControls from "./OrbitControls.js";
 
 import BuildTrackballControls from "./TrackballControls.js";
@@ -14,7 +16,7 @@ const OrbitControls = BuildOrbitControls(THREE);
 const TrackballControls = BuildTrackballControls(THREE);
 const ImageLoader = BuildImageLoader(THREE);
 
-export default function(container, sourceSet, background, specular, inside) {
+export default function globe(container, sourceSet, background, specular, inside) {
   const loresMap = sourceSet[0];
   const medresMap = sourceSet[1];
   const hiresMap = sourceSet[2];
@@ -28,7 +30,6 @@ export default function(container, sourceSet, background, specular, inside) {
   const rotationSpeed = 0.0005;
   const waitTimeAfterInteraction = 10000;
 
-  const element = container.renderRoot.querySelector("#element");
   const webglEl = container.renderRoot.querySelector("#webgl");
 
   const width = container.clientWidth;
@@ -56,19 +57,17 @@ export default function(container, sourceSet, background, specular, inside) {
   const distance = 1.5
 
   function calculateFov(camera) {
-    const width = container.clientWidth / window.devicePixelRatio;
-    const height = container.clientHeight / window.devicePixelRatio;
+    const newWidth = container.clientWidth / window.devicePixelRatio;
+    const newHeight = container.clientHeight / window.devicePixelRatio;
+
     let fov;
-    if(height < width) {
-      fov = 42.7858 * Math.pow(1.00005, height);
-      console.log(`HEIGHT: ${height} = ${fov}; ${window.devicePixelRatio}`);
+    if(newHeight < newWidth) {
+      fov = 42.7858 * 1.00005 ** newHeight;
+      // console.log(`HEIGHT: ${newHeight} = ${fov}; ${window.devicePixelRatio}`);
     } else {
-      if(window.devicePixelRatio > 1) {
-        fov = 147.422 * Math.pow(0.9981, width);
-      } else {
-        fov = 147.422 * Math.pow(0.998832, width);
-      }
-      console.log(`WIDTH: ${width} = ${fov}; ${window.devicePixelRatio}`);
+      const base = window.devicePixelRatio > 1 ? 0.9981 : 0.998832;
+      fov = 147.422 * base ** newWidth;
+      // console.log(`WIDTH: ${newWidth} = ${fov}; ${window.devicePixelRatio}`);
     }
 
     camera.fov = fov;
@@ -76,7 +75,7 @@ export default function(container, sourceSet, background, specular, inside) {
     camera.maxFov = fov * 1.5;
   }
 
-  const camera = new THREE.PerspectiveCamera(
+  const camera = new Camera(
     45,
     width / height,
     0.01,
@@ -85,7 +84,7 @@ export default function(container, sourceSet, background, specular, inside) {
   camera.position.x = 0;
   camera.position.y = 0.2;
   camera.position.z = distance;
-  calculateFov(camera);
+  camera.calculateFov(container.clientWidth, container.clientHeight, window.devicePixelRatio);
 
   const renderer = new THREE.WebGLRenderer({ alpha: true });
   renderer.setClearColor(0xffffff, 0);
@@ -213,7 +212,7 @@ export default function(container, sourceSet, background, specular, inside) {
 
   function onResize() {
     camera.aspect = container.clientWidth / container.clientHeight;
-    calculateFov(camera);
+    camera.calculateFov(container.clientWidth, container.clientHeight, window.devicePixelRatio);
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);
   }
