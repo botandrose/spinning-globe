@@ -1,48 +1,47 @@
-export default function(THREE) {
-  return class ImageLoader {
-    constructor(manager) {
-      this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
-    }
+import * as THREE from 'three';
 
-    load ( url, onLoad, onProgress, onError ) {
-      const scope = this;
+class ImageLoader {
+  constructor(manager) {
+    this.manager = manager ?? THREE.DefaultLoadingManager;
+  }
 
-      const image = document.createElementNS('http://www.w3.org/1999/xhtml', 'img');
-      image.onload = function () {
-        image.onload = null;
-        URL.revokeObjectURL( image.src );
-        if ( onLoad ) onLoad( image );
-        scope.manager.itemEnd( url );
-      };
-      image.onerror = onError;
+  load(url, onLoad, onProgress, onError) {
+    const image = document.createElementNS('http://www.w3.org/1999/xhtml', 'img');
+    image.onload = () => {
+      image.onload = null;
+      URL.revokeObjectURL(image.src);
+      if (onLoad) onLoad(image);
+      this.manager.itemEnd(url);
+    };
+    image.onerror = onError;
 
-      const loader = new THREE.FileLoader();
-      loader.setPath( this.path );
-      loader.setResponseType( 'blob' );
-      loader.setWithCredentials( this.withCredentials );
-      loader.load( url, ( blob ) => {
-        image.src = URL.createObjectURL( blob );
-      }, onProgress, onError );
+    const loader = new THREE.FileLoader();
+    loader.setPath(this.path);
+    loader.setResponseType('blob');
+    loader.setWithCredentials(this.withCredentials);
+    loader.load(url, blob => {
+      image.src = URL.createObjectURL(blob);
+    }, onProgress, onError);
 
-      scope.manager.itemStart( url );
+    this.manager.itemStart(url);
 
-      return image;
-    }
+    return image;
+  }
 
-    setCrossOrigin ( value ) {
-      this.crossOrigin = value;
-      return this;
-    }
+  setCrossOrigin(value) {
+    this.crossOrigin = value;
+    return this;
+  }
 
-    setWithCredentials ( value ) {
-      this.withCredentials = value;
-      return this;
-    }
+  setWithCredentials(value) {
+    this.withCredentials = value;
+    return this;
+  }
 
-    setPath ( value ) {
-      this.path = value;
-      return this;
-    }
-  };
-}
+  setPath(value) {
+    this.path = value;
+    return this;
+  }
+};
 
+export default ImageLoader;

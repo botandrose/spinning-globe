@@ -8,13 +8,12 @@ import BuildOrbitControls from "./OrbitControls.js";
 
 import BuildTrackballControls from "./TrackballControls.js";
 
-import BuildImageLoader from "./ImageLoader.js";
+import ImageLoader from "./ImageLoader.js";
 
 import Detector from "./Detector.js";
 
 const OrbitControls = BuildOrbitControls(THREE);
 const TrackballControls = BuildTrackballControls(THREE);
-const ImageLoader = BuildImageLoader(THREE);
 
 export default function globe(container, sourceSet, background, specular, inside) {
   const loresMap = sourceSet[0];
