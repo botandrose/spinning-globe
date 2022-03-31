@@ -1,7 +1,8 @@
 import { LitElement } from 'lit';
-import { css, html } from './template.js';
+import { html, css } from './HtmlCss.js';
 import device from "current-device";
-import globe from './globe.js';
+import WebGLDetector from "./WebGLDetector.js";
+import Renderer from './Renderer.js';
 
 export class SpinningGlobe extends LitElement {
   static get styles() {
@@ -53,10 +54,14 @@ export class SpinningGlobe extends LitElement {
   firstUpdated() {
     super.firstUpdated();
     this.webglEl = this.renderRoot.querySelector("#webgl");
-    globe(this.webglEl, this.texture, this.background, this.specular, this.inside, (event) => {
-      const percent = event.loaded / event.total * 100;
-      this._loading = percent;
-    });
+    if (!WebGLDetector.webgl) {
+      WebGLDetector.addGetWebGLMessage(this.webglEl);
+    } else {
+      this.renderer = new Renderer(this.webglEl, this.texture, this.background, this.specular, this.inside, (event) => {
+        const percent = event.loaded / event.total * 100;
+        this._loading = percent;
+      });
+    }
   }
 
   render() {

@@ -1,6 +1,11 @@
 import { PerspectiveCamera } from 'three';
 
 class Camera extends PerspectiveCamera {
+  constructor({ fov, aspect, near, far, position }) {
+    super(fov, aspect, near, far);
+    this.position.fromArray(position);
+  }
+
   calculateFov(containerWidth, containerHeight, pixelRatio) {
     const width = containerWidth / pixelRatio;
     const height = containerHeight / pixelRatio;
