@@ -9,11 +9,11 @@ function css() {
       color: var(--spinning-globe-text-color, #000);
     }
     #webgl {
-      position: relative;
+      position: absolute;
       height: 100%;
-      // canvas
-      //   height: auto !important
-      //   max-width: 100%
+      width: 100%;
+      left: 0;
+      top: 0;
     }
 
     .loading-screen {
