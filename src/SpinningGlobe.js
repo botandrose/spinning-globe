@@ -10,6 +10,7 @@ export class SpinningGlobe extends LitElement {
   }
 
   static properties = {
+    src: { type: String },
     srcset: { type: String },
     background: { type: String },
     specular: { type: Number },
@@ -26,11 +27,11 @@ export class SpinningGlobe extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.sourceSet = this.__parseSrcset();
-    this.texture = this.__chooseTexture();
+    this.texture = this.src || this.__chooseTexture();
   }
 
   __parseSrcset() {
-    return this.srcset
+    return (this.srcset || "")
       .split(',')
       .map(line => line.match(/([^ ]+) ([^, ]+)/)?.[1])
       .filter(a => a);

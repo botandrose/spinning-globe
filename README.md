@@ -13,8 +13,10 @@ npm i spinning-globe
 ```html
 <script type="module">import 'spinning-globe';</script>
 
-<spinning-globe></spinning-globe>
+<spinning-globe srcset="texture2k.jpg 2k, texture4k.jpg 4k" background="stars.png" specular="7" inside="false"></spinning-globe>
 ```
+
+The only required attribute is at least one texture map url in src or srcset.
 
 Or, if you want to specify the custom html tag used:
 
@@ -24,7 +26,7 @@ Or, if you want to specify the custom html tag used:
   window.customElements.define('derpy-derp', SpinningGlobe);
 </script>
 
-<derpy-derp></derpy-derp>
+<derpy-derp src="texture.jpg"></derpy-derp>
 ```
 
 ## Linting and formatting
