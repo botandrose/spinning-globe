@@ -68,7 +68,7 @@ export default function globe(
     rotation: [0, rotation, 0],
     material: {
       transparent: true,
-      side: inside ? THREE.BackSide : THREE.Frontside,
+      side: inside ? THREE.BackSide : THREE.FrontSide,
     },
     loadingCallback,
   });
