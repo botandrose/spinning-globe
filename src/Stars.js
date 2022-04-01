@@ -7,10 +7,6 @@ export default class extends THREE.Mesh {
       side: THREE.BackSide,
       map: texture,
     });
-    super(
-      new THREE.SphereGeometry(radius, segments, segments),
-      material,
-    );
+    super(new THREE.SphereGeometry(radius, segments, segments), material);
   }
 }
-

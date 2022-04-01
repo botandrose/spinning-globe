@@ -1,7 +1,7 @@
 import { LitElement } from 'lit';
 import { html, css } from './HtmlCss.js';
-import device from "current-device";
-import WebGLDetector from "./WebGLDetector.js";
+import device from 'current-device';
+import WebGLDetector from './WebGLDetector.js';
 import Renderer from './Renderer.js';
 
 export class SpinningGlobe extends LitElement {
@@ -26,7 +26,7 @@ export class SpinningGlobe extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.sourceSet = this.__parseSrcset();
-    this.texture =  this.__chooseTexture();
+    this.texture = this.__chooseTexture();
   }
 
   __parseSrcset() {
@@ -41,26 +41,40 @@ export class SpinningGlobe extends LitElement {
     const medresMap = this.sourceSet[1];
     const hiresMap = this.sourceSet[2];
     const isMobile = device.mobile();
-    const isPretendingToBeDesktop = /iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isPretendingToBeDesktop =
+      /iPad|iPhone|iPod/.test(navigator.platform) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     const isFirefox = /Firefox/.test(navigator.userAgent);
 
     const width = this.clientWidth;
     const fullscreen = width > 1000;
-    let map = fullscreen && !isMobile && !isPretendingToBeDesktop ? (hiresMap || loresMap) : (loresMap || hiresMap);
-    if(fullscreen && isFirefox) { map = medresMap; }
+    let map =
+      fullscreen && !isMobile && !isPretendingToBeDesktop
+        ? hiresMap || loresMap
+        : loresMap || hiresMap;
+    if (fullscreen && isFirefox) {
+      map = medresMap;
+    }
     return map;
   }
 
   firstUpdated() {
     super.firstUpdated();
-    this.webglEl = this.renderRoot.querySelector("#webgl");
+    this.webglEl = this.renderRoot.querySelector('#webgl');
     if (!WebGLDetector.webgl) {
-      WebGLDetector.addGetWebGLMessage(this.webglEl);
+      this.webglEl.appendChild(WebGLDetector.getWebGLErrorMessage());
     } else {
-      this.renderer = new Renderer(this.webglEl, this.texture, this.background, this.specular, this.inside, (event) => {
-        const percent = event.loaded / event.total * 100;
-        this._loading = percent;
-      });
+      this.renderer = new Renderer(
+        this.webglEl,
+        this.texture,
+        this.background,
+        this.specular,
+        this.inside,
+        event => {
+          const percent = (event.loaded / event.total) * 100;
+          this._loading = percent;
+        }
+      );
     }
   }
 

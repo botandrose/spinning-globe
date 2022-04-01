@@ -11,7 +11,7 @@ class Camera extends PerspectiveCamera {
     const height = containerHeight / pixelRatio;
 
     let fov;
-    if(height < width) {
+    if (height < width) {
       fov = 42.7858 * 1.00005 ** height;
       // console.log(`HEIGHT: ${height} = ${fov}; ${pixelRatio}`);
     } else {

@@ -67,7 +67,9 @@ function css() {
 
 function html(loading) {
   return lithtml`
-    ${loading < 100 ? lithtml`
+    ${
+      loading < 100
+        ? lithtml`
       <div class="loading-screen">
         <div
           class="loading-screen__loader"
@@ -76,7 +78,9 @@ function html(loading) {
           Loading...
         </div>
       </div>
-    ` : ''}
+    `
+        : ''
+    }
     <div id="webgl"></div>
   `;
 }

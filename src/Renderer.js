@@ -1,13 +1,20 @@
 import * as THREE from 'three';
 
 import Camera from './Camera.js';
-import CameraTrackingLight from "./CameraTrackingLight.js";
-import Stars from "./Stars.js";
-import Sphere from "./Sphere.js";
-import OrbitControls from "./OrbitControls.js";
-import TrackballControls from "./TrackballControls.js";
+import CameraTrackingLight from './CameraTrackingLight.js';
+import Stars from './Stars.js';
+import Sphere from './Sphere.js';
+import OrbitControls from './OrbitControls.js';
+import TrackballControls from './TrackballControls.js';
 
-export default function globe(element, texture, background, specular, inside, loadingCallback) {
+export default function globe(
+  element,
+  texture,
+  background,
+  specular,
+  inside,
+  loadingCallback
+) {
   const rotation = 15;
   const rotationSpeed = 0.0005;
   const waitTimeAfterInteraction = 10000;
@@ -29,7 +36,11 @@ export default function globe(element, texture, background, specular, inside, lo
     far: 1000,
     position: [0, 0.2, 1.5],
   });
-  camera.calculateFov(element.clientWidth, element.clientHeight, window.devicePixelRatio);
+  camera.calculateFov(
+    element.clientWidth,
+    element.clientHeight,
+    window.devicePixelRatio
+  );
 
   const renderer = new THREE.WebGLRenderer({ alpha: true });
   renderer.setClearColor(0xffffff, 0);
@@ -41,7 +52,7 @@ export default function globe(element, texture, background, specular, inside, lo
     color: 0xffffff,
     intensity: 0.7,
     position: [5, 3, 5],
-  })
+  });
   if (!inside) {
     scene.add(light);
   }
@@ -62,11 +73,13 @@ export default function globe(element, texture, background, specular, inside, lo
     loadingCallback,
   });
 
-  if(background) {
+  if (background) {
     scene.add(new Stars(90, 64, background));
   }
 
-  const controls = inside ? new OrbitControls(camera, element) : new TrackballControls(camera, element);
+  const controls = inside
+    ? new OrbitControls(camera, element)
+    : new TrackballControls(camera, element);
 
   render();
 
@@ -74,7 +87,10 @@ export default function globe(element, texture, background, specular, inside, lo
   function render() {
     controls.update();
     // slowly rotate the globe if we haven't touched it recently
-    if(!controls.lastTouchAt || new Date() - controls.lastTouchAt > waitTimeAfterInteraction) {
+    if (
+      !controls.lastTouchAt ||
+      new Date() - controls.lastTouchAt > waitTimeAfterInteraction
+    ) {
       sphere.rotation.y += rotationSpeed;
     }
     light.trackCamera();
@@ -82,15 +98,19 @@ export default function globe(element, texture, background, specular, inside, lo
     renderer.render(scene, camera);
   }
 
-  new ResizeObserver(entries => {
+  new ResizeObserver(() => {
     onResize();
   }).observe(element);
   onResize();
 
   function onResize() {
     camera.aspect = element.clientWidth / element.clientHeight;
-    camera.calculateFov(element.clientWidth, element.clientHeight, window.devicePixelRatio);
+    camera.calculateFov(
+      element.clientWidth,
+      element.clientHeight,
+      window.devicePixelRatio
+    );
     camera.updateProjectionMatrix();
     renderer.setSize(element.clientWidth, element.clientHeight);
   }
-};
+}

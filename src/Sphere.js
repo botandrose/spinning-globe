@@ -1,15 +1,26 @@
 import * as THREE from 'three';
-import ImageLoader from "./ImageLoader.js";
+import ImageLoader from './ImageLoader.js';
 
 export default class extends THREE.Mesh {
-  constructor({ scene, radius, segments, texture, bumpMap, bumpScale, specular, rotation, material, loadingCallback }) {
-    const ctx = document.createElement("canvas").getContext("2d");
+  constructor({
+    scene,
+    radius,
+    segments,
+    texture,
+    bumpMap,
+    bumpScale,
+    specular,
+    rotation,
+    material,
+    loadingCallback,
+  }) {
+    const ctx = document.createElement('canvas').getContext('2d');
     const loader = new ImageLoader();
     // load a image resource
     loader.load(
       texture,
 
-      (image) => {
+      image => {
         // use the image, e.g. draw part of it on a canvas
         const imgw = image.width;
         const imgh = image.height;
@@ -24,7 +35,7 @@ export default class extends THREE.Mesh {
 
       loadingCallback,
 
-      (event) => {
+      () => {
         console.error(`An error occurred loading ${texture}`);
       }
     );
@@ -37,7 +48,7 @@ export default class extends THREE.Mesh {
         map,
         bumpMap: bumpMap ? new THREE.TextureLoader().load(bumpMap) : null,
         bumpScale,
-        specular: new THREE.Color("grey"),
+        specular: new THREE.Color('grey'),
         shininess: specular,
       })
     );
@@ -47,6 +58,5 @@ export default class extends THREE.Mesh {
     mesh.material.side = material.side;
 
     return mesh;
-  };
+  }
 }
-

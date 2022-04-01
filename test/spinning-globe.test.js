@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { fixture, expect } from '@open-wc/testing';
+import { describe, it, fixture, expect } from '@open-wc/testing';
 
 import '../spinning-globe.js';
 
@@ -19,7 +19,9 @@ describe('SpinningGlobe', () => {
   });
 
   it('can override the title via attribute', async () => {
-    const el = await fixture(html`<spinning-globe title="attribute title"></spinning-globe>`);
+    const el = await fixture(
+      html`<spinning-globe title="attribute title"></spinning-globe>`
+    );
 
     expect(el.title).to.equal('attribute title');
   });

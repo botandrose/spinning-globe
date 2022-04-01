@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 export default class extends THREE.DirectionalLight {
   constructor({ camera, color, intensity, position }) {
-    super(color, intensity)
+    super(color, intensity);
     this.position.fromArray(position);
     this.camera = camera;
   }
@@ -20,4 +20,3 @@ export default class extends THREE.DirectionalLight {
     this.position.copy(q);
   }
 }
-

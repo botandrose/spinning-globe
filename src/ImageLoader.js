@@ -6,7 +6,10 @@ class ImageLoader {
   }
 
   load(url, onLoad, onProgress, onError) {
-    const image = document.createElementNS('http://www.w3.org/1999/xhtml', 'img');
+    const image = document.createElementNS(
+      'http://www.w3.org/1999/xhtml',
+      'img'
+    );
     image.onload = () => {
       image.onload = null;
       URL.revokeObjectURL(image.src);
@@ -19,9 +22,14 @@ class ImageLoader {
     loader.setPath(this.path);
     loader.setResponseType('blob');
     loader.setWithCredentials(this.withCredentials);
-    loader.load(url, blob => {
-      image.src = URL.createObjectURL(blob);
-    }, onProgress, onError);
+    loader.load(
+      url,
+      blob => {
+        image.src = URL.createObjectURL(blob);
+      },
+      onProgress,
+      onError
+    );
 
     this.manager.itemStart(url);
 
@@ -42,6 +50,6 @@ class ImageLoader {
     this.path = value;
     return this;
   }
-};
+}
 
 export default ImageLoader;
