@@ -33,6 +33,13 @@ function css() {
       box-sizing: border-box;
     }
 
+    @media screen and (max-width: 2600px) {
+      .loading-screen {
+        left: calc(50% - 50px);
+        width: 100px;
+       }
+    }
+
     .loading-screen__loader {
       border-top-left-radius: 5px;
       border-bottom-left-radius: 5px;
