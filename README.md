@@ -13,7 +13,7 @@ npm i spinning-globe
 ```html
 <script type="module">import 'spinning-globe';</script>
 
-<spinning-globe srcset="texture2k.jpg 2k, texture4k.jpg 4k" background="stars.png" specular="7" inside="false"></spinning-globe>
+<spinning-globe srcset="texture2k.jpg 2k, texture4k.jpg 4k" background="stars.png" density="4k" specular="7" inside="false"></spinning-globe>
 ```
 
 The only required attribute is at least one texture map url in src or srcset.

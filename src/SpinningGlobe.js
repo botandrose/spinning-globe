@@ -12,6 +12,7 @@ export class SpinningGlobe extends LitElement {
   static properties = {
     src: { type: String },
     srcset: { type: String },
+    density: { type: String },
     background: { type: String },
     specular: { type: Number },
     inside: { converter: value => ['inside', 'true'].includes(value) },
@@ -27,20 +28,20 @@ export class SpinningGlobe extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.sourceSet = this.__parseSrcset();
-    this.texture = this.src || this.__chooseTexture();
+    this.density = this.__chooseDensity();
+    this.texture = this.__chooseTexture();
   }
 
   __parseSrcset() {
     return (this.srcset || "")
       .split(',')
-      .map(line => line.match(/([^ ]+) ([^, ]+)/)?.[1])
-      .filter(a => a);
+      .map(line => line.match(/([^ ]+) ([^, ]+)/))
+      .filter(a => a)
+      .reduce((map, match) => Object.assign({}, { [match[2]]: match[1] }), {})
   }
 
-  __chooseTexture() {
-    const loresMap = this.sourceSet[0];
-    const medresMap = this.sourceSet[1];
-    const hiresMap = this.sourceSet[2];
+  __chooseDensity() {
+    if(this.density) { return this.density; }
     const isMobile = device.mobile();
     const isPretendingToBeDesktop =
       /iPad|iPhone|iPod/.test(navigator.platform) ||
@@ -49,14 +50,19 @@ export class SpinningGlobe extends LitElement {
 
     const width = this.clientWidth;
     const fullscreen = width > 1000;
-    let map =
+    let density =
       fullscreen && !isMobile && !isPretendingToBeDesktop
-        ? hiresMap || loresMap
-        : loresMap || hiresMap;
+        ? "16k"
+        : "4k";
     if (fullscreen && isFirefox) {
-      map = medresMap;
+      density = "8k";
     }
-    return map;
+    return density;
+  }
+
+  __chooseTexture() {
+    let texture = this.sourceSet[this.density];
+    return texture ? texture : Object.values(this.sourceSet)[0];
   }
 
   firstUpdated() {
