@@ -15,7 +15,7 @@ export class SpinningGlobe extends LitElement {
     density: { type: String },
     background: { type: String },
     specular: { type: Number },
-    inside: { converter: value => ['inside', 'true'].includes(value) },
+    inside: { converter: value => ['inside', 'true', ''].includes(value) },
     _loading: { state: true },
   };
 
