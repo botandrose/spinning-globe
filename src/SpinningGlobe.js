@@ -10,7 +10,7 @@ export class SpinningGlobe extends LitElement {
   }
 
   static properties = {
-    src: { type: String },
+    src: { type: String, reflect: true },
     srcset: { type: String },
     density: { type: String },
     background: { type: String },
@@ -25,11 +25,23 @@ export class SpinningGlobe extends LitElement {
     this._loading = 0;
   }
 
+  #density;
+
+  get density() { return this.#density; }
+  set density(value) {
+    let oldValue = this.#density;
+    this.#density = value;
+    this.requestUpdate('density', oldValue);
+    if(this.renderer) {
+      this.renderer.texture = this.__chooseSrc();
+    }
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this.sourceSet = this.__parseSrcset();
     this.density = this.__chooseDensity();
-    this.texture = this.__chooseTexture();
+    this.src ??= this.__chooseSrc();
   }
 
   __parseSrcset() {
@@ -37,7 +49,7 @@ export class SpinningGlobe extends LitElement {
       .split(',')
       .map(line => line.match(/([^ ]+) ([^, ]+)/))
       .filter(a => a)
-      .reduce((map, match) => Object.assign({}, { [match[2]]: match[1] }), {})
+      .reduce((map, match) => Object.assign(map, { [match[2]]: match[1] }), {})
   }
 
   __chooseDensity() {
@@ -60,9 +72,8 @@ export class SpinningGlobe extends LitElement {
     return density;
   }
 
-  __chooseTexture() {
-    let texture = this.sourceSet[this.density];
-    return texture ? texture : Object.values(this.sourceSet)[0];
+  __chooseSrc() {
+    return this.sourceSet[this.density] || Object.values(this.sourceSet)[0];
   }
 
   firstUpdated() {
@@ -73,7 +84,7 @@ export class SpinningGlobe extends LitElement {
     } else {
       this.renderer = new Renderer(
         this.webglEl,
-        this.texture,
+        this.src,
         this.background,
         this.specular,
         this.inside,

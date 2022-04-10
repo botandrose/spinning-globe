@@ -21,14 +21,9 @@ export default class extends THREE.Mesh {
       texture,
 
       image => {
-        // use the image, e.g. draw part of it on a canvas
-        const imgw = image.width;
-        const imgh = image.height;
-        // make the canvas big enough
-        ctx.canvas.width = imgw;
-        ctx.canvas.height = imgh;
-        // add image to canvas
-        ctx.drawImage(image, 0, 0);
+        this.ctx.canvas.width = image.width;
+        this.ctx.canvas.height = image.height;
+        this.ctx.drawImage(image, 0, 0);
 
         scene.add(mesh);
       },
@@ -53,10 +48,33 @@ export default class extends THREE.Mesh {
       })
     );
 
+    mesh.ctx = ctx;
+    mesh.map = map;
+    mesh.loadingCallback = loadingCallback;
     mesh.rotation.fromArray(rotation);
     mesh.material.transparent = material.transparent;
     mesh.material.side = material.side;
 
     return mesh;
+  }
+
+  set texture(value) {
+    const loader = new ImageLoader();
+    loader.load(
+      value,
+
+      image => {
+        this.ctx.canvas.width = image.width;
+        this.ctx.canvas.height = image.height;
+        this.ctx.drawImage(image, 0, 0);
+        this.material.map = new THREE.CanvasTexture(this.ctx.canvas);
+      },
+
+      this.loadingCallback,
+
+      () => {
+        console.error(`An error occurred loading ${value}`);
+      }
+    );
   }
 }
