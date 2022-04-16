@@ -32,9 +32,8 @@ export class SpinningGlobe extends LitElement {
     let oldValue = this.#density;
     this.#density = value;
     this.requestUpdate('density', oldValue);
-    this.src = this.__chooseSrc();
     if(this.renderer) {
-      this.renderer.texture = this.src;
+      this.renderer.texture = this.src = this.__chooseSrc();
     }
   }
 
