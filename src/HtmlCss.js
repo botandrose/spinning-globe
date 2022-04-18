@@ -18,10 +18,10 @@ function css() {
 
     .loading-screen {
       position: absolute;
-      top: calc(50% - 5px);
-      left: calc(50% - 100px);
-      width: 200px;
-      height: 10px;
+      top: calc(50% - 15px);
+      left: calc(50% - 12.5%);
+      width: 25%;
+      height: 30px;
       text-align: center;
       text-transform: uppercase;
       display: flex;
@@ -31,29 +31,24 @@ function css() {
       overflow: hidden;
       box-shadow: rgba(0, 0, 0, 0.25) 0 2px 10px;
       box-sizing: border-box;
-    }
-
-    @media screen and (max-width: 2600px) {
-      .loading-screen {
-        left: calc(50% - 50px);
-        width: 100px;
-       }
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 15px;
     }
 
     .loading-screen__loader {
-      border-top-left-radius: 5px;
-      border-bottom-left-radius: 5px;
-      height: 10px;
+      border-top-left-radius: 15px;
+      border-bottom-left-radius: 15px;
+      height: 30px;
       display: inline-block;
       font-size: 10px;
       position: relative;
       text-indent: -9999em;
       background: linear-gradient(
-        rgba(255, 255, 255, 0.25),
-        rgba(255, 255, 255, 0.1)
+        rgba(140, 25, 28, 1.0),
+        rgba(140, 25, 28, 0.75)
       );
       color: transparent;
-      max-width: 95%;
+      max-width: 99%;
       box-sizing: border-box;
     }
 
@@ -61,14 +56,34 @@ function css() {
       content: '';
       position: absolute;
       z-index: 1;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      width: 199px;
+      width: 24.99%;
       height: 100%;
       left: 0;
       top: 0;
-      border-radius: 5px;
+      border-radius: 15px;
       box-sizing: border-box;
     }
+
+    @media screen and (max-width: 2600px) {
+      .loading-screen {
+        top: calc(50% - 5px);
+        left: calc(50% - 50px);
+        height: 10px;
+        width: 100px;
+        border-radius: 5px;
+      }
+      .loading-screen__loader {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        height: 10px;
+      }
+      .loading-screen__loader:before {
+        width: 99px;
+        border-radius: 5px;
+      }
+    }
+
+
   `;
 }
 
