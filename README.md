@@ -29,6 +29,13 @@ Or, if you want to specify the custom html tag used:
 <derpy-derp src="texture.jpg"></derpy-derp>
 ```
 
+You can also style the background of the loading bar:
+```css
+spinning-globe {
+  --loading-bar-background: linear-gradient(rgba(140, 25, 28, 1.0), rgba(140, 25, 28, 0.75));
+}
+```
+
 ## Linting and formatting
 
 To scan the project for linting and formatting errors, run

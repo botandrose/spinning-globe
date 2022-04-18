@@ -6,7 +6,6 @@ function css() {
     :host {
       display: block;
       position: relative;
-      color: var(--spinning-globe-text-color, #000);
     }
     #webgl {
       position: absolute;
@@ -43,10 +42,7 @@ function css() {
       font-size: 10px;
       position: relative;
       text-indent: -9999em;
-      background: linear-gradient(
-        rgba(140, 25, 28, 1.0),
-        rgba(140, 25, 28, 0.75)
-      );
+      background: var(--loading-bar-background, linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1)));
       color: transparent;
       max-width: 99%;
       box-sizing: border-box;
