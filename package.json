@@ -3,7 +3,7 @@
   "description": "Webcomponent spinning-globe following open-wc recommendations",
   "license": "MIT",
   "author": "spinning-globe",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
