@@ -12,7 +12,7 @@ export class SpinningGlobe extends LitElement {
   static properties = {
     src: { type: String, reflect: true },
     srcset: { type: String },
-    density: { type: String },
+    density: { type: String, reflect: true },
     background: { type: String },
     specular: { type: Number },
     inside: { converter: value => ['inside', 'true', ''].includes(value) },
