@@ -59,6 +59,7 @@ export class SpinningGlobe extends LitElement {
       /iPad|iPhone|iPod/.test(navigator.platform) ||
       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     const isFirefox = /Firefox/.test(navigator.userAgent);
+    const isIPad = /iPad/.test(navigator.platform);
 
     const width = this.clientWidth;
     const fullscreen = width > 1000;
@@ -66,7 +67,7 @@ export class SpinningGlobe extends LitElement {
       fullscreen && !isMobile && !isPretendingToBeDesktop
         ? "16k"
         : "4k";
-    if (fullscreen && isFirefox) {
+    if (fullscreen && (isFirefox || isIPad)) {
       density = "8k";
     }
     return density;
