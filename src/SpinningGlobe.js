@@ -23,6 +23,7 @@ export class SpinningGlobe extends LitElement {
     super();
     this.specular = 7;
     this._loading = 0;
+    this.loaded = false
   }
 
   #density;
@@ -91,6 +92,13 @@ export class SpinningGlobe extends LitElement {
         event => {
           const percent = (event.loaded / event.total) * 100;
           this._loading = percent;
+          if(percent == 100) {
+            this.loaded = true
+            this.dispatchEvent(new CustomEvent("loaded", {
+              bubbles: true,
+              composed: true
+            }))
+          }
         }
       );
     }
